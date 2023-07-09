@@ -1,3 +1,6 @@
 # Risultati compilazione
 *.out
 *.sens
+
+# File .run generato dallo script python
+*.run
