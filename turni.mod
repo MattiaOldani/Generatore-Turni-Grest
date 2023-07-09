@@ -7,18 +7,21 @@ set Giorni;																# Giorni
 param Disponibilita {Giorni, Animatori, FasceOrarie} binary;			# Disponibilita
 
 # VARIABILI
-var Turni {Giorni, Animatori, FasceOrarie} binary;						# Assegnamento [binaria]
+var Assegnamento {Giorni, Animatori, FasceOrarie} binary;				# Assegnamento
 var NumeroTurni {Animatori} integer;									# Numero di turni per animatore
 var MassimoNumeroTurni integer;											# Massimo assegnamento
 var MinimoNumeroTurni integer;											# Minimo assegnamento
 
 # VINCOLI
-# Presenza di 2 animatori per turno
-subject to MinimoNumero {g in Giorni, fo in FasceOrarie}:
-    sum {a in Animatori} Turni[g,a,fo] = 2;
+# Presenza di 2 animatori per turno, esclusa la mensa del giovedi
+subject to MinimoNumeroAnimatori {g in Giorni, fo in FasceOrarie : g <> 'Giovedi' and fo <> 'Mensa'}:
+    sum {a in Animatori} Assegnamento[g,a,fo] = 2;
+# Mensa del giovedi senza turno
+subject to MensaGiovediNoTurno:
+	sum {a in Animatori} Assegnamento['Giovedi',a,'Mensa'] = 0;
 # Definizione del numero di turni
 subject to DefinizioneNumeroTurni {a in Animatori}:
-    NumeroTurni[a] = sum {g in Giorni, fo in FasceOrarie} Turni[g,a,fo];
+    NumeroTurni[a] = sum {g in Giorni, fo in FasceOrarie} Assegnamento[g,a,fo];
 # Definizione del massimo numero di turni
 subject to DefinizioneMassimoNumeroTurni {a in Animatori}:
     MassimoNumeroTurni >= NumeroTurni[a];
@@ -26,14 +29,14 @@ subject to DefinizioneMassimoNumeroTurni {a in Animatori}:
 subject to DefinizioneMinimoNumeroTurni {a in Animatori}:
     MinimoNumeroTurni <= NumeroTurni[a];
 # Faccio turno solo se sono disponibile
-subject to EffettivaDisponibilita {g in Giorni, a in Animatori, fo in FasceOrarie}:
-    Turni[g,a,fo] <= Disponibilita[g,a,fo];
+subject to Candidatura {g in Giorni, a in Animatori, fo in FasceOrarie}:
+    Assegnamento[g,a,fo] <= Disponibilita[g,a,fo];
 # Se faccio il pre allora faccio anche la mattina
 subject to PreAlloraMattina {g in Giorni, a in Animatori}:
-    Turni[g,a,'Pre'] <= Turni[g,a,'Mattino'];
+    Assegnamento[g,a,'Pre'] <= Assegnamento[g,a,'Mattino'];
 # Se faccio il post allora faccio anche il pomeriggio
 subject to PostAlloraPomeriggio {g in Giorni, a in Animatori}:
-    Turni[g,a,'Post'] <= Turni[g,a,'Pomeriggio'];
+    Assegnamento[g,a,'Post'] <= Assegnamento[g,a,'Pomeriggio'];
 
 # OBIETTIVO
 # Minimizzare la differenza tra massimo e minimo numero di turni
