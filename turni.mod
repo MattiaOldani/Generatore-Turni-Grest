@@ -26,8 +26,14 @@ subject to DefinizioneMassimoNumeroTurni {a in Animatori}:
 subject to DefinizioneMinimoNumeroTurni {a in Animatori}:
     MinimoNumeroTurni <= NumeroTurni[a];
 # Faccio turno solo se sono disponibile
-subject to Dispo {g in Giorni, a in Animatori, fo in FasceOrarie}:
+subject to EffettivaDisponibilita {g in Giorni, a in Animatori, fo in FasceOrarie}:
     Turni[g,a,fo] <= Disponibilita[g,a,fo];
+# Se faccio il pre allora faccio anche la mattina
+subject to PreAlloraMattina {g in Giorni, a in Animatori}:
+    Turni[g,a,'Pre'] <= Turni[g,a,'Mattino'];
+# Se faccio il post allora faccio anche il pomeriggio
+subject to PostAlloraPomeriggio {g in Giorni, a in Animatori}:
+    Turni[g,a,'Post'] <= Turni[g,a,'Pomeriggio'];
 
 # OBIETTIVO
 # Minimizzare la differenza tra massimo e minimo numero di turni
@@ -47,7 +53,7 @@ param Disponibilita:	Pre Mattino Mensa Pomeriggio Post	:=
 Lunedi		Mattia		1	1		0	  0			 1
 Lunedi		Vittorio	0	1		1	  1			 1
 Lunedi		Riccardo	1	1		1	  1			 1
-Martedi 	Mattia		0	1		0	  1			 1
+Martedi 	Mattia		1	1		0	  1			 1
 Martedi		Vittorio	1	0		1	  1			 1
 Martedi		Riccardo	1	1		1	  1			 0
 Mercoledi	Mattia		1	0		0	  1			 1
@@ -55,7 +61,7 @@ Mercoledi	Vittorio	1	1		1	  1			 1
 Mercoledi	Riccardo	1	1		1	  0			 1
 Giovedi		Mattia		1	1		0	  1			 1
 Giovedi		Vittorio	1	0		1	  1			 1
-Giovedi		Riccardo	0	1		1	  1			 0
+Giovedi		Riccardo	1	1		1	  1			 0
 Venerdi		Mattia		1	1		0	  1			 1
 Venerdi		Vittorio	1	1		1	  0			 1
 Venerdi		Riccardo	0	0		1 	  1			 1;
