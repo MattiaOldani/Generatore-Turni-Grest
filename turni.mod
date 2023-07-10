@@ -14,11 +14,10 @@ var MinimoNumeroTurni integer;											# Minimo assegnamento
 
 # VINCOLI
 # Presenza di 2 animatori per turno, esclusa la mensa del giovedi
-subject to MinimoNumeroAnimatori {g in Giorni, fo in FasceOrarie : g <> 'Giovedi' and fo <> 'Mensa'}:
+subject to MinimoNumeroAnimatori {g in Giorni, fo in FasceOrarie : g <> '04_Giovedi' or fo <> '02_Mensa'}:
     sum {a in Animatori} Assegnamento[g,a,fo] = 2;
-# Mensa del giovedi senza turno
 subject to MensaGiovediNoTurno:
-	sum {a in Animatori} Assegnamento['Giovedi',a,'Mensa'] = 0;
+	sum {a in Animatori} Assegnamento['04_Giovedi',a,'02_Mensa'] = 0;
 # Definizione del numero di turni
 subject to DefinizioneNumeroTurni {a in Animatori}:
     NumeroTurni[a] = sum {g in Giorni, fo in FasceOrarie} Assegnamento[g,a,fo];
@@ -31,12 +30,9 @@ subject to DefinizioneMinimoNumeroTurni {a in Animatori}:
 # Faccio turno solo se sono disponibile
 subject to Candidatura {g in Giorni, a in Animatori, fo in FasceOrarie}:
     Assegnamento[g,a,fo] <= Disponibilita[g,a,fo];
-# Se faccio il pre allora faccio anche la mattina
-subject to PreAlloraMattina {g in Giorni, a in Animatori}:
-    Assegnamento[g,a,'Pre'] <= Assegnamento[g,a,'Mattino'];
-# Se faccio il post allora faccio anche il pomeriggio
-subject to PostAlloraPomeriggio {g in Giorni, a in Animatori}:
-    Assegnamento[g,a,'Post'] <= Assegnamento[g,a,'Pomeriggio'];
+# Ogni animatore ripete al massimo 2 volte lo stesso turno
+subject to MassimaRipetizione {a in Animatori, fo in FasceOrarie}:
+    sum {g in Giorni} Assegnamento[g,a,fo] <= 2;
 
 # OBIETTIVO
 # Minimizzare la differenza tra massimo e minimo numero di turni
@@ -46,27 +42,42 @@ minimize z : MassimoNumeroTurni - MinimoNumeroTurni;
 
 data;
 
-set Animatori := Mattia Vittorio Riccardo;
+set Animatori := Mattia Vittorio Riccardo Matteo Davide Sam;
 
-set FasceOrarie := Pre Mattino Mensa Pomeriggio Post;
+set FasceOrarie := 01_Pre 02_Mensa 03_Post;
 
-set Giorni := Lunedi Martedi Mercoledi Giovedi Venerdi;
+set Giorni := 01_Lunedi 02_Martedi 03_Mercoledi 04_Giovedi 05_Venerdi;
 
-param Disponibilita:	Pre Mattino Mensa Pomeriggio Post	:=
-Lunedi		Mattia		1	1		0	  0			 1
-Lunedi		Vittorio	0	1		1	  1			 1
-Lunedi		Riccardo	1	1		1	  1			 1
-Martedi 	Mattia		1	1		0	  1			 1
-Martedi		Vittorio	1	0		1	  1			 1
-Martedi		Riccardo	1	1		1	  1			 0
-Mercoledi	Mattia		1	0		0	  1			 1
-Mercoledi	Vittorio	1	1		1	  1			 1
-Mercoledi	Riccardo	1	1		1	  0			 1
-Giovedi		Mattia		1	1		0	  1			 1
-Giovedi		Vittorio	1	0		1	  1			 1
-Giovedi		Riccardo	1	1		1	  1			 0
-Venerdi		Mattia		1	1		0	  1			 1
-Venerdi		Vittorio	1	1		1	  0			 1
-Venerdi		Riccardo	0	0		1 	  1			 1;
+param Disponibilita:	    01_Pre 02_Mensa 03_Post	:=
+01_Lunedi		Mattia		1      1		0
+01_Lunedi		Vittorio	0      1		1
+01_Lunedi		Riccardo	1      1		1
+01_Lunedi		Matteo  	1      1		1
+01_Lunedi       Davide      1      1        1
+01_Lunedi       Sam         1      1        1
+02_Martedi 	    Mattia		1      1		0
+02_Martedi		Vittorio	1      1		1
+02_Martedi		Riccardo	1      1		1
+02_Martedi		Matteo  	1      1		1
+02_Martedi      Davide      1      1        1
+02_Martedi      Sam         1      1        1
+03_Mercoledi	Mattia		1      1		0
+03_Mercoledi	Vittorio	1      1		1
+03_Mercoledi	Riccardo	1      1		1
+03_Mercoledi	Matteo  	1      1		1
+03_Mercoledi    Davide      1      1        1
+03_Mercoledi    Sam         1      1        1
+04_Giovedi		Mattia		1      1		0
+04_Giovedi		Vittorio	0      1		1
+04_Giovedi		Riccardo	1      1		1
+04_Giovedi		Matteo  	1      1		1
+04_Giovedi      Davide      1      1        1
+04_Giovedi      Sam         1      1        1
+05_Venerdi		Mattia		1      1		0
+05_Venerdi		Vittorio	1      1		1
+05_Venerdi		Riccardo	0      1		1
+05_Venerdi		Matteo  	1      1		1
+05_Venerdi      Davide      1      1        1
+05_Venerdi      Sam         1      1        1;
 
 end;
