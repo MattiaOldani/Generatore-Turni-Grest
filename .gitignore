@@ -4,3 +4,6 @@
 
 # File .run generato dallo script python
 *.run
+
+# Cache di python
+__pycache__/

@@ -2,6 +2,8 @@ import os
 import re
 import subprocess
 
+from shifts import Shifts
+
 
 def parse_file(filename: str):
     with open(filename, "r+") as f:
@@ -11,12 +13,18 @@ def parse_file(filename: str):
     objective = None
     for line in contents:
         if line.startswith("var"):
-            if res := re.findall(re.compile(r"(?<=var )(\w+)"), line):
-                variables.append(res[0])
+            result = re.findall(
+                re.compile(r"(?<=var )(\w+)"), line
+            )
+            if result is not None:
+                variables.append(result[0])
 
         if line.startswith("maximize") or line.startswith("minimize"):
-            if res := re.findall(re.compile(r"(?<=(?<=maximize )|(?<=minimize ))(\w+)"), line):
-                objective = res[0]
+            result = re.findall(
+                re.compile(r"(?<=(?<=maximize )|(?<=minimize ))(\w+)"), line
+            )
+            if result is not None:
+                objective = result[0]
 
         if line.startswith("data"):
             break
@@ -43,9 +51,39 @@ def main():
     with open(runfile, "w+") as f:
         f.write(contents)
 
-    subprocess.call(["ampl", runfile])
+    results = subprocess.check_output(["ampl", runfile]).decode("utf-8")
+    results = results.split("\n")[10:][::-1][2:][::-1]
 
-    # Da salvare output ed estrarre i turni
+    shifts = dict()
+    LABELS = ["PRE", "MENSA", "POST"]
+    for t in range(3):
+        rows = list()
+        for i,row in enumerate(results):
+            if row == "" or row == ";":
+                shifts[LABELS[t]] = '\n'.join(rows[2:])
+                jump = i+1 if row == "" else i+2
+                results = results[jump:]
+                break
+            else:
+                rows.append(row)
+    
+    shifts_value_counts = list()
+    for i,row in enumerate(results):
+        if row == ";":
+            shifts_value_counts = '\n'.join(shifts_value_counts[1:])
+            results = results[i+2:]
+            break
+        else:
+            shifts_value_counts.append(row)
+
+    number_of_shifts = '\n'.join(results[:2])
+    results = results[3:]
+
+    objective = results.pop()
+
+    result = Shifts(shifts, shifts_value_counts, number_of_shifts, objective)
+
+    print(result)
 
 
 if __name__ == "__main__":
