@@ -31,8 +31,11 @@ subject to DefinizioneMinimoNumeroTurni {a in Animatori}:
 subject to Candidatura {g in Giorni, a in Animatori, fo in FasceOrarie}:
     Assegnamento[g,a,fo] <= Disponibilita[g,a,fo];
 # Ogni animatore ripete al massimo 2 volte lo stesso turno
-subject to MassimaRipetizione {a in Animatori, fo in FasceOrarie}:
+subject to MassimaRipetizionePerSettimana {a in Animatori, fo in FasceOrarie}:
     sum {g in Giorni} Assegnamento[g,a,fo] <= 2;
+# Ogni animatore può fare al massimo 1 turno al giorno
+subject to MassimaRipetizionePerGiorno {a in Animatori, g in Giorni}:
+    sum {fo in FasceOrarie} Assegnamento[g,a,fo] <= 1;
 
 # OBIETTIVO
 # Minimizzare la differenza tra massimo e minimo numero di turni
