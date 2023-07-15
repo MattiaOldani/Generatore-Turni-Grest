@@ -2,7 +2,9 @@ import os
 import re
 import subprocess
 
+from days import Days
 from shifts import Shifts
+from turns import Turns
 
 
 def parse_file(filename: str):
@@ -53,8 +55,17 @@ def main():
 
     shifts = Shifts(results)
 
-    # print(shifts)
-
+    # Aggiungere inserimento nel file .md
+    with open("template.md", "a") as f:
+        for turn in Turns:
+            f.write(f"| {turn.name} | ")
+            for day in Days:
+                animators = shifts.get_animators_shifts(turn, day)
+                res = ", ".join([a[1] for a in animators])
+                if res == "":
+                    res = "-"
+                f.write(f"{res} | ")
+            f.write("\n")
 
 if __name__ == "__main__":
     main()

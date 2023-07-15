@@ -6,7 +6,7 @@ from turns import Turns
 
 class Shifts():
     
-    def __init__(self, data: str):
+    def __init__(self, data: str) -> None:
         # Parsing
         results = data.split("\n")[12:][::-1][2:][::-1]
 
@@ -56,8 +56,9 @@ class Shifts():
         self.obj = obj
         self.shifts = shifts
 
-        print(self.counts)
-        print(self.animators)
-        print(self.obj)
-        print(self.max_, self.min_)
-        print(self.shifts)
+    
+    def get_animators_shifts(self, turn: Turns, day: Days) -> list[tuple[str]]:
+        return list(filter(
+            lambda x : x[0].value == day.value,
+            self.shifts[turn.name]
+        ))
