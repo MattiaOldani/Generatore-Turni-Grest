@@ -36,11 +36,13 @@ def parse_file(filename: str):
 
 def main():
     filename = [f for f in os.listdir() if f.endswith(".mod")][0]
+    datafile = [f for f in os.listdir() if f.endswith(".dat")][0]
     variables, objective = parse_file(filename)
 
     contents = (
         "reset;\n"
         f"model {filename};\n"
+        f"data {datafile};\n"
         f"option solver knitro;\n"
         "solve;\n"
         f"display {', '.join(variables)};\n"

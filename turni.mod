@@ -1,16 +1,24 @@
 # TURNI ANIMATORI
 
 # DATI
-set Animatori;															# Animatori
-set FasceOrarie;														# Fasce orarie
-set Giorni;																# Giorni
-param Disponibilita {Giorni, Animatori, FasceOrarie} binary;			# Disponibilita
+# Insieme degli animatori che hanno risposto al form
+set Animatori;
+# Insieme delle fasce orarie da coprire
+set FasceOrarie;
+# Insieme dei giorni di grest
+set Giorni;
+# Disponibilità di ogni animatore nei vari giorni e nelle varie fasce orarie
+param Disponibilita {Giorni, Animatori, FasceOrarie} binary;
 
 # VARIABILI
-var Assegnamento {Giorni, Animatori, FasceOrarie} binary;				# Assegnamento
-var NumeroTurni {Animatori} integer;									# Numero di turni per animatore
-var MassimoNumeroTurni integer;											# Massimo assegnamento
-var MinimoNumeroTurni integer;											# Minimo assegnamento
+# Assegnamento di ogni animatore ad una fascia oraria in un certo giorno
+var Assegnamento {Giorni, Animatori, FasceOrarie} binary;
+# Numero di turni settimanali per animatore
+var NumeroTurni {Animatori} integer;
+# Massimo numero di turni fatti da un animatore
+var MassimoNumeroTurni integer;
+# Minimo numero di turni fatti da un animatore
+var MinimoNumeroTurni integer;
 
 # VINCOLI
 # Presenza di 2 animatori per turno, esclusa la mensa del giovedi
@@ -40,47 +48,5 @@ subject to MassimaRipetizionePerGiorno {a in Animatori, g in Giorni}:
 # OBIETTIVO
 # Minimizzare la differenza tra massimo e minimo numero di turni
 minimize z : MassimoNumeroTurni - MinimoNumeroTurni;
-
-##################################################
-
-data;
-
-set Animatori := Mattia Vittorio Riccardo Matteo Davide Sam;
-
-set FasceOrarie := 01_Pre 02_Mensa 03_Post;
-
-set Giorni := 01_Lunedi 02_Martedi 03_Mercoledi 04_Giovedi 05_Venerdi;
-
-param Disponibilita:	    01_Pre 02_Mensa 03_Post	:=
-01_Lunedi		Mattia		1      1		0
-01_Lunedi		Vittorio	0      1		1
-01_Lunedi		Riccardo	1      1		1
-01_Lunedi		Matteo  	1      1		1
-01_Lunedi       Davide      1      1        1
-01_Lunedi       Sam         1      1        1
-02_Martedi 	    Mattia		1      1		0
-02_Martedi		Vittorio	1      1		1
-02_Martedi		Riccardo	1      1		1
-02_Martedi		Matteo  	1      1		1
-02_Martedi      Davide      1      1        1
-02_Martedi      Sam         1      1        1
-03_Mercoledi	Mattia		1      1		0
-03_Mercoledi	Vittorio	1      1		1
-03_Mercoledi	Riccardo	1      1		1
-03_Mercoledi	Matteo  	1      1		1
-03_Mercoledi    Davide      1      1        1
-03_Mercoledi    Sam         1      1        1
-04_Giovedi		Mattia		1      1		0
-04_Giovedi		Vittorio	0      1		1
-04_Giovedi		Riccardo	1      1		1
-04_Giovedi		Matteo  	1      1		1
-04_Giovedi      Davide      1      1        1
-04_Giovedi      Sam         1      1        1
-05_Venerdi		Mattia		1      1		0
-05_Venerdi		Vittorio	1      1		1
-05_Venerdi		Riccardo	0      1		1
-05_Venerdi		Matteo  	1      1		1
-05_Venerdi      Davide      1      1        1
-05_Venerdi      Sam         1      1        1;
 
 end;
