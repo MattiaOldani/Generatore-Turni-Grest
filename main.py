@@ -55,16 +55,15 @@ def main():
 
     shifts = Shifts(results)
 
-    # Aggiungere inserimento nel file .md
     with open("template.md", "a") as f:
         for turn in Turns:
             f.write(f"| {turn.name} | ")
             for day in Days:
                 animators = shifts.get_animators_shifts(turn, day)
-                res = ", ".join([a[1] for a in animators])
-                if res == "":
-                    res = "-"
-                f.write(f"{res} | ")
+                names = ", ".join([a[1] for a in animators])
+                if names == "":
+                    names = "-"
+                f.write(f"{names} | ")
             f.write("\n")
 
 if __name__ == "__main__":
