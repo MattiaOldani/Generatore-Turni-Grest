@@ -7,7 +7,7 @@ python form.py
 cp template.md copy.md
 
 python main.py
-pandoc -o turni.pdf template.md --pdf-engine=weasyprint
+pandoc -o turni.pdf template.md
 
 # Pulizia finale
 cp copy.md template.md
