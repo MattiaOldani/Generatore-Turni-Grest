@@ -7,5 +7,5 @@ header-inclues:
 
 # Turni animatori
 
-|   | **Lunedì** | **Martedì** | **Mercoledì** | **Giovedì** | **Venerdì** |
-| :-: | :-: | :-: | :-: | :-: | :-: |
+|     | **Lunedì** | **Martedì** | **Mercoledì** | **Giovedì** | **Venerdì** |
+| :-: | :--------: | :---------: | :-----------: | :---------: | :---------: |

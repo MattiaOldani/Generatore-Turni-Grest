@@ -62,6 +62,14 @@ def main():
             f.write(f"| _{turn.name}_ | ")
             for day in Days:
                 animators = shifts.get_animators_shifts(turn, day)
+                
+                def format(name):
+                    find = name[1][1:]
+                    for i in range(len(find)):
+                        if find[i].isupper():
+                            return (name[0], name[1][:i+1] + " " + name[1][i+1:])
+
+                animators = list(map(format, animators))
                 names = ", ".join([a[1] for a in animators])
                 if names == "":
                     names = "-"
