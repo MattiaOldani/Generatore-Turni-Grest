@@ -57,9 +57,9 @@ def main():
 
     shifts = Shifts(results)
 
-    with open("template.md", "a") as f:
+    with open("template.typ", "a") as f:
         for turn in Turns:
-            f.write(f"| _{turn.name}_ | ")
+            f.write(f"\t[_{turn.name}_], ")
             for day in Days:
                 animators = shifts.get_animators_shifts(turn, day)
                 
@@ -73,8 +73,9 @@ def main():
                 names = ", ".join([a[1] for a in animators])
                 if names == "":
                     names = "-"
-                f.write(f"{names} | ")
+                f.write(f"[{names}], ")
             f.write("\n")
+        f.write(")\n")
 
 
 if __name__ == "__main__":

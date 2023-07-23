@@ -4,13 +4,13 @@
 python form.py
 
 # Generazione file turni.pdf
-cp template.md copy.md
+cp template.typ copy.typ
 
 python main.py
-pandoc -o turni.pdf template.md
+typst compile template.typ turni.pdf
 
 # Pulizia finale
-cp copy.md template.md
-rm copy.md
+cp copy.typ template.typ
+rm copy.typ
 
 exit
