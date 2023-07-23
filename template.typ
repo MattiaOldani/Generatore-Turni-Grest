@@ -1,3 +1,5 @@
+#set align(center)
+
 = Turni animatori
 \
 
