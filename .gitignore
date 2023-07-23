@@ -10,3 +10,6 @@ __pycache__/
 
 # PDF generato dalla compilazione
 turni.pdf
+
+# File .dat con l'input per il file .mod
+data.dat
