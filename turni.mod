@@ -1,12 +1,12 @@
 # TURNI ANIMATORI
 
 # DATI
-# Insieme degli animatori che hanno risposto al form
-set Animatori;
 # Insieme delle fasce orarie da coprire
 set FasceOrarie;
 # Insieme dei giorni di grest
 set Giorni;
+# Insieme degli animatori che hanno risposto al form
+set Animatori;
 # Disponibilità di ogni animatore nei vari giorni e nelle varie fasce orarie
 param Disponibilita {Giorni, Animatori, FasceOrarie} binary;
 
