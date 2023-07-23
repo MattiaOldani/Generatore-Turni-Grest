@@ -68,5 +68,6 @@ def main():
                 f.write(f"{names} | ")
             f.write("\n")
 
+
 if __name__ == "__main__":
     main()
