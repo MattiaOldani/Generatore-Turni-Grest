@@ -24,34 +24,25 @@ def main():
         
         pre = list()
         for field in PRE:
-            if entry[field] == "":
-                pre.append("0")
-            else:
-                pre.append("1")
+            pre.append("0" if entry[field] == "" else "1")
         
         mensa = list()
         for field in MENSA:
-            if entry[field] == "":
-                mensa.append("0")
-            else:
-                mensa.append("1")
+            mensa.append("0" if entry[field] == "" else "1")
 
         post = list()
         for field in POST:
-            if entry[field] == "":
-                post.append("0")
-            else:
-                post.append("1")
+            post.append("0" if entry[field] == "" else "1")
         
         turns[name] = [pre, mensa, post] 
 
     with open("data.dat", "w") as f:
         shifts = [f"0{t.value+1}_{t.name}" for t in Turns]
-        
         f.write(f"set FasceOrarie := {' '.join(shifts)};\n\n")
-        days = [f"0{day.value+1}_{day.name}" for day in Days]
         
+        days = [f"0{day.value+1}_{day.name}" for day in Days]
         f.write(f"set Giorni := {' '.join(days)};\n\n")
+        
         f.write(f"set Animatori := {' '.join(names)};\n\n")
         
         f.write(f"param Disponibilita: {' '.join(shifts)} :=\n")
@@ -59,10 +50,10 @@ def main():
         for day in Days:
             result = str()
             for name in names:
-                result = result + days[day.value] + " " + name + " "
-                t = turns[name]
-                toto = t[0][day.value] + " " + t[1][day.value] + " " + t[2][day.value]
-                result += toto + "\n"
+                result = f"{result}{days[day.value]} {name} "
+                turn = turns[name]
+                turn = f"{turn[0][day.value]} {turn[1][day.value]} {turn[2][day.value]}"
+                result = f"{result}{turn}\n"
             if day.value == 4:
                 result = result.strip() + ";\n"
             f.write(result)
