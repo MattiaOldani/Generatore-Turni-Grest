@@ -3,7 +3,7 @@ import requests
 
 from days import Days
 from environment import FORM_API_KEY, ENDPOINT
-from turns import Turns
+from slots import Slots
 
 
 def main():
@@ -37,15 +37,15 @@ def main():
         turns[name] = [pre, mensa, post] 
 
     with open("data.dat", "w") as f:
-        shifts = [f"0{t.value+1}_{t.name}" for t in Turns]
-        f.write(f"set FasceOrarie := {' '.join(shifts)};\n\n")
+        slots = [f"0{s.value+1}_{s.name}" for s in Slots]
+        f.write(f"set FasceOrarie := {' '.join(slots)};\n\n")
         
         days = [f"0{day.value+1}_{day.name}" for day in Days]
         f.write(f"set Giorni := {' '.join(days)};\n\n")
         
         f.write(f"set Animatori := {' '.join(names)};\n\n")
         
-        f.write(f"param Disponibilita: {' '.join(shifts)} :=\n")
+        f.write(f"param Disponibilita: {' '.join(slots)} :=\n")
 
         for day in Days:
             result = str()

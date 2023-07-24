@@ -3,7 +3,7 @@ import re
 import subprocess
 
 from days import Days
-from shifts import Shifts
+from slots import Slots
 from turns import Turns
 
 
@@ -55,20 +55,19 @@ def main():
 
     results = subprocess.check_output(["ampl", runfile]).decode("utf-8")
 
-    shifts = Shifts(results)
+    turns = Turns(results)
+
+    def format(name):
+        find = name[1][1:]
+        for i in range(len(find)):
+            if find[i].isupper():
+                return (name[0], name[1][:i+1] + " " + name[1][i+1:])
 
     with open("template.typ", "a") as f:
-        for turn in Turns:
-            f.write(f"\t[_{turn.name}_], ")
+        for slot in Slots:
+            f.write(f"\t[_{slot.name}_], ")
             for day in Days:
-                animators = shifts.get_animators_shifts(turn, day)
-                
-                def format(name):
-                    find = name[1][1:]
-                    for i in range(len(find)):
-                        if find[i].isupper():
-                            return (name[0], name[1][:i+1] + " " + name[1][i+1:])
-
+                animators = turns.get_animators(slot, day)
                 animators = list(map(format, animators))
                 names = ", ".join([a[1] for a in animators])
                 if names == "":

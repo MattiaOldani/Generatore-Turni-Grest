@@ -9,7 +9,7 @@ python form.py
 
 # Generazione file turni.pdf
 cd ..
-mv form/days.py form/turns.py form/data.dat template
+mv form/days.py form/slots.py form/data.dat template
 cd template
 cp template.typ copy.typ
 
@@ -18,7 +18,7 @@ typst compile template.typ turni.pdf
 
 # Configurazione iniziale
 rm data.dat turni.run
-mv days.py turns.py ../
+mv days.py slots.py ../
 
 cp copy.typ template.typ
 rm copy.typ
