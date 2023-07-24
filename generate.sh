@@ -16,13 +16,21 @@ cp template.typ copy.typ
 python template.py
 typst compile template.typ turni.pdf
 
-# Configurazione iniziale
+# Pulizia post generazione file turni.pdf
 rm data.dat turni.run
 mv days.py slots.py ../
 
 cp copy.typ template.typ
 rm copy.typ
 
-# Da aggiungere spostamento nella cartella per invio su telegram
+# Invio su telegram
+cd ..
+mv template/turni.pdf telegram
+cd telegram
+
+python telegram.py
+
+# Pulizia post invio su telegram
+rm turni.pdf
 
 exit
