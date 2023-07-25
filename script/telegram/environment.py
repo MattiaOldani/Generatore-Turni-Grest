@@ -1,3 +1,3 @@
 API_KEY = "API_KEY"
 
-CHAT_ID = -1
+CHANNEL_ID = -1
