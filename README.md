@@ -1,6 +1,10 @@
-# Turni grest
+# Generatore turni grest
 
-Siamo stanchi di fare i turni a mano, quindi li facciamo fare a qualcun'altro
+Questo "progetto" nasce dall'esigenza dei coordinatori del grest di Capralba di poter fare i turni degli animatori in modo rapido e senza perdite di tempo
+
+Sicuramente ci sono moltissime imperfezioni, soprattutto per quanto riguarda la gestione dei programmi python e dei suoi package, però per ora funziona, quindi si gode
+
+Sicuramente un giorno questo progetto verrà sistemato a dovere, sia per la parte di python, sia per la parte di Docker, che però non è stata ancora inserita
 
 ## Workflow
 
@@ -10,7 +14,7 @@ La prima fase è la __creazione del file `data.dat`__, un file che contiene le i
 
 #### Compilazione del form
 
-Ogni animatore compila un [__form__](https://mattiaoldani.wufoo.com/forms/z998uk61yux8gy/) tra venerdì mattina e domenica pomeriggio, dove inserisce:
+Ogni animatore compila un [form Wufoo](https://www.wufoo.com/) tra venerdì mattina e domenica pomeriggio, dove inserisce:
 * nome e cognome
 * disponibilità per le seguenti fasce orarie:
   * pre (dalle 08:00 alle 08:45)
@@ -19,7 +23,7 @@ Ogni animatore compila un [__form__](https://mattiaoldani.wufoo.com/forms/z998uk
 
 #### Creazione del file data.dat
 
-Domenica sera lo script __`form.py`__ effettua delle richieste HTTP alle API fornite dal [sito del form](https://www.wufoo.com/) per scaricare le risposte date dagli animatori e popolare il file __`data.dat`__
+Domenica sera lo script __`form.py`__ effettua delle richieste HTTP alle API fornite da Wufoo per scaricare le risposte date dagli animatori e popolare il file __`data.dat`__
 
 ### Seconda fase
 
