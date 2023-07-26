@@ -1,4 +1,5 @@
 #set align(center)
+#set page(flipped: true)
 
 = Turni animatori
 \
