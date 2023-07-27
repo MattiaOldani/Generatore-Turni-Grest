@@ -58,10 +58,13 @@ def main():
     turns = Turns(results)
 
     def format(name):
-        find = name[1][1:]
-        for i in range(len(find)):
-            if find[i].isupper():
-                return (name[0], name[1][:i+1] + " " + name[1][i+1:])
+        find = name[1]
+        results = find[0]
+        for char in find[1:]:
+            if char.isupper():
+                results += " "
+            results += char
+        return (name[0], results)
 
     with open("template.typ", "a") as f:
         for slot in Slots:

@@ -19,7 +19,7 @@ def main():
     turns = dict()
     names = list()
     for entry in entries:
-        name = entry["Field1"].strip() + entry["Field2"].strip()
+        name = entry["Field1"].strip() + ''.join(entry["Field2"].strip().split(" "))
         names.append(name)
         
         pre = list()
