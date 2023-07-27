@@ -15,8 +15,9 @@ La prima fase è la __creazione del file `data.dat`__, un file che contiene le i
 #### Compilazione del form
 
 Ogni animatore compila un [form Wufoo](https://www.wufoo.com/) tra venerdì mattina e domenica pomeriggio, dove inserisce:
-* nome e cognome
-* disponibilità per le seguenti fasce orarie:
+* __nome__: se presenti più nomi ne va inserito uno solo
+* __cognome__
+* __disponibilità__ per le seguenti fasce orarie:
   * pre (dalle 08:00 alle 08:45)
   * mensa (dalle 12:00 alle 13:30)
   * post (dalle 17:00 alle 18:00)
