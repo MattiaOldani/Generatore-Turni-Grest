@@ -13,7 +13,7 @@ def main():
     entries = requests.get(ENDPOINT, headers=headers).json()["Entries"]
 
     PRE = ["Field105", "Field106", "Field107", "Field108", "Field109"]
-    MENSA = ["Field305", "Field306", "Field307", "Field308", "Field309"]
+    MENSA = ["Field305", "Field306", "Field307", "Field309"]
     POST = ["Field205", "Field206", "Field207", "Field208", "Field209"]
 
     turns = dict()
@@ -29,6 +29,7 @@ def main():
         mensa = list()
         for field in MENSA:
             mensa.append("0" if entry[field] == "" else "1")
+        mensa.insert(3,'0')
 
         post = list()
         for field in POST:
