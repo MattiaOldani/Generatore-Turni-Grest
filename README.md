@@ -40,6 +40,12 @@ Questa operazione viene eseguita all'interno dello script __`template.py`__, per
 
 Il risultato di questa operazione è una __matrice di assegnamento tridimensionale__, che indica, per ogni fascia oraria, quale animatore è presente e in quale giorno
 
+Ogni settimana sono allocabili 28 animatori, due per ognuna delle tre fasce orarie giornaliere per cinque giorni, escluso il turno della mensa del giovedì
+
+Se al form sono presenti meno di 28 risposte, viene aggiunto un vincolo al file `turni.mod` che obbliga ogni animatore a fare almeno un turno, mentre nel caso di superamento delle 28 risposte questo vincolo viene tolto per permettere ad ampl di arrivare ad una soluzione ammissibile
+
+Il vincolo appena citato probabilmente è inutile se andiamo a vedere come è scritta la funzione obiettivo, ma inserirlo come bound su una variabile non ci va a modificare il tempo di esecuzione
+
 #### Formattazione dei risultati
 
 Sempre tramite lo script `template.py` la matrice risultante dal programma `turni.mod` viene salvata, assieme ad altre informazioni, all'interno di una classe presente nel file __`turns.py`__
