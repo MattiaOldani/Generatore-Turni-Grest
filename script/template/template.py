@@ -43,7 +43,7 @@ def main():
         "reset;\n"
         f"model {filename};\n"
         f"data {datafile};\n"
-        f"option solver knitro;\n"
+        f"option solver baron;\n"
         "solve;\n"
         f"display {', '.join(variables)};\n"
         f"display {objective};\n"

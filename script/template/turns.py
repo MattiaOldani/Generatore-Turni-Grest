@@ -7,7 +7,7 @@ from slots import Slots
 class Turns():
     def __init__(self, data: str) -> None:
         # Parsing
-        results = data.split("\n")[12:][::-1][2:][::-1]
+        results = data.split("\n")[4:][::-1][2:][::-1]
 
         def compare(x,y):
             return x[0].value - y[0].value
@@ -39,7 +39,9 @@ class Turns():
                 break
             else:
                 row = row.strip().split(" ")
-                counts[row[0]] = int(row[-1])
+                row = list(filter(lambda x : x != "", row))
+                for i in range(0,len(row),2):
+                    counts[row[i]] = int(row[i+1])
 
         max_ = int(results.pop(0).split(" ")[2])
         min_ = int(results.pop(0).split(" ")[2])
