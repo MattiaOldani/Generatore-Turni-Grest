@@ -59,7 +59,14 @@ class Turns():
 
     
     def get_animators(self, slot: Slots, day: Days) -> list[tuple[str]]:
+        def compare(x,y):
+            return x[1] < y[1]
+        compare = cmp_to_key(compare)
+
         return list(filter(
             lambda x : x[0].value == day.value,
-            self.turns[slot.name]
+            sorted(
+                self.turns[slot.name],
+                key=compare
+            )
         ))
