@@ -2,12 +2,12 @@ import os
 import re
 import subprocess
 
-from days import Days
-from slots import Slots
-from turns import Turns
+from utils.days import Days
+from utils.slots import Slots
+from utils.turns import Turns
 
 
-def parse_file(filename: str):
+def __parse_file(filename: str):
     with open(filename, "r+") as f:
         contents = [line.strip() for line in f.readlines()]
 
@@ -34,10 +34,10 @@ def parse_file(filename: str):
     return variables, objective
 
 
-def main():
+def generate_template():
     filename = [f for f in os.listdir() if f.endswith(".mod")][0]
     datafile = [f for f in os.listdir() if f.endswith(".dat")][0]
-    variables, objective = parse_file(filename)
+    variables, objective = __parse_file(filename)
 
     contents = (
         "reset;\n"
@@ -78,7 +78,9 @@ def main():
                 f.write(f"[{names}], ")
             f.write("\n")
         f.write(")\n")
+    
+    return turns
 
 
 if __name__ == "__main__":
-    main()
+    generate_template()
