@@ -1,3 +1,0 @@
-API_KEY = "API_KEY"
-
-CHANNEL_ID = -1
