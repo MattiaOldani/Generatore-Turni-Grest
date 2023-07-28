@@ -58,7 +58,7 @@ class Turns():
         self.turns = turns
 
     
-    def get_animators(self, slot: Slots, day: Days) -> list[tuple[str]]:
+    def get_animators(self, slot, day):
         def compare(x,y):
             return x[1] < y[1]
         compare = cmp_to_key(compare)
@@ -70,3 +70,24 @@ class Turns():
                 key=compare
             )
         ))
+    
+
+    def get_animators_turns_counts(self, sort=False, reverse=False):
+        counts = list(self.counts.items())
+
+        match [isinstance(sort,bool),isinstance(reverse,bool)]:
+            case [True,True]:
+                if sort:
+                    counts.sort(key=lambda x : x[1], reverse=reverse)
+            case [True,False]:
+                raise ValueError(
+                    "Il parametro 'reverse' deve essere booleano"
+                )
+            case [False,True]:
+                raise ValueError(
+                    "Il parametro 'sort' deve essere booleano"
+                )
+            case _:
+                ...
+        
+        return counts
