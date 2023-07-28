@@ -1,36 +1,13 @@
 #!/bin/bash
 
-# Generazione file data.dat
+# Generazione file turni.pdf e invio su telegram
 cd script
-mv *.py form
-cd form
+cp template.typ template_copy.typ
 
-python form.py
-
-# Generazione file turni.pdf
-cd ..
-mv form/days.py form/slots.py form/data.dat template
-cd template
-cp template.typ copy.typ
-
-python template.py
-typst compile template.typ turni.pdf
-
-# Pulizia post generazione file turni.pdf
-rm data.dat turni.run
-mv days.py slots.py ../
-
-cp copy.typ template.typ
-rm copy.typ
-
-# Invio su telegram
-cd ..
-mv template/turni.pdf telegram
-cd telegram
-
-python telegram.py
+python main.py
 
 # Pulizia post invio su telegram
-rm turni.pdf
+cp template_copy.typ template.typ
+rm data.dat template_copy.typ turni.run turni.pdf
 
 exit

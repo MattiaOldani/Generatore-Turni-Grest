@@ -1,9 +1,2 @@
-# Risultati compilazione
-*.out
-*.sens
-
 # Cache di python
 __pycache__/
-
-# PDF generato dalla compilazione
-turni.pdf
