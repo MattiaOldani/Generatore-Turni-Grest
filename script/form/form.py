@@ -1,12 +1,14 @@
 import base64
 import requests
 
-from days import Days
-from environment import FORM_API_KEY, ENDPOINT
-from slots import Slots
+from utils.days import Days
+from utils.slots import Slots
 
 
-def main():
+def generate_dat_file():
+    ENDPOINT = "http://USERNAME.wufoo.com/api/v3/forms/FORM_HASH/entries.json?pageSize=100"
+    FORM_API_KEY = "API_KEY"
+
     authcode = base64.b64encode(f"{FORM_API_KEY}:ciao".encode()).decode()
     headers = {"Authorization" : f"Basic {authcode}"}
 
@@ -61,4 +63,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    generate_dat_file()
