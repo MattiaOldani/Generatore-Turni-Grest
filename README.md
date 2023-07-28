@@ -2,10 +2,6 @@
 
 Questo "progetto" nasce dall'esigenza dei coordinatori del grest di Capralba di poter fare i turni degli animatori in modo rapido e senza perdite di tempo
 
-Sicuramente ci sono moltissime imperfezioni, soprattutto per quanto riguarda la gestione dei programmi python e dei suoi package, però per ora funziona, quindi si gode
-
-Sicuramente un giorno questo progetto verrà sistemato a dovere, sia per la parte di python, sia per la parte di Docker, che però non è stata ancora inserita
-
 ## Workflow
 
 ### Prima fase
@@ -24,7 +20,7 @@ Ogni animatore compila un [form Wufoo](https://www.wufoo.com/) tra venerdì matt
 
 #### Creazione del file data.dat
 
-Domenica sera lo script __`form.py`__ effettua delle richieste HTTP alle API fornite da Wufoo per scaricare le risposte date dagli animatori e popolare il file __`data.dat`__
+Domenica sera, tramite gli script presenti nel package __`form`__, vengono effettuate delle richieste HTTP alle API fornite da Wufoo per scaricare le risposte date dagli animatori e popolare il file __`data.dat`__
 
 ### Seconda fase
 
@@ -36,7 +32,7 @@ Questa fase è la più lunga poichè richiede prima una fase di __creazione dei 
 
 Il file `data.dat` creato nella fase precedente viene dato in pasto al programma __`turni.mod`__, che viene compilato tramite __ampl__ da riga di comando
 
-Questa operazione viene eseguita all'interno dello script __`template.py`__, per poter catturare l'output di ampl e per poter poi passare alla successiva fase di formattazione
+Questa operazione viene eseguita dagli script del package __`template`__, che poi catturano l'output di ampl e lo passano alla successiva fase di formattazione
 
 Il risultato di questa operazione è una __matrice di assegnamento tridimensionale__, che indica, per ogni fascia oraria, quale animatore è presente e in quale giorno
 
@@ -48,15 +44,15 @@ Il vincolo appena citato probabilmente è inutile se andiamo a vedere come è sc
 
 #### Formattazione dei risultati
 
-Sempre tramite lo script `template.py` la matrice risultante dal programma `turni.mod` viene salvata, assieme ad altre informazioni, all'interno di una classe presente nel file __`turns.py`__
+La matrice risultante dal programma `turni.mod` viene salvata, assieme ad altre informazioni, all'interno di una classe presente nel package __`utils`__
 
-La parte finale dello script utilizza la classe appena citata per popolare il file __`template.typ`__, che contiene appunto il template base per la creazione della tabella dei turni
+L'ultimo compito degli script del package `template` e della classe appena citata è quello di popolare il file __`template.typ`__, che contiene appunto il template base per la creazione della tabella dei turni
 
 La tabella contiene tre righe, una per ogni fascia oraria, e cinque colonne, una per ogni giorno di grest
 
 #### Compilazione
 
-Il file `template.typ` viene compilato tramite [__typst__](https://github.com/typst/typst) da riga di comando per generare il file __`turni.pdf`__
+Il file `template.typ` viene compilato tramite [__typst__](https://github.com/typst/typst) per generare il file __`turni.pdf`__
 
 Viene preferito il formato `typ` a quello `md` per la sua semplicità e facilità nella compilazione per generare il file pdf dei turni
 
@@ -66,4 +62,4 @@ La terza e ultima fase è l'__invio__, tramite bot telegram, dei turni generati 
 
 Mattia oppure Vittorio, dipende chi legge il messaggio per primo, salverà poi il file e lo inoltrerà nel gruppo con tutti gli animatori
 
-Questa fase è la più semplice ed è gestita da poche righe di codice presenti nel file __`telegram.py`__
+Questa fase è la più semplice ed è gestita dagli script presenti nel package __`telegram`__, che inviano, oltre al pdf dei turni, anche il numero di turni che ogni animatore deve fare durante la settimana
