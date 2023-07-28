@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Generazione file turni.pdf e invio su telegram
-cd script
+cd generator
 cp template.typ template_copy.typ
 
 python main.py
