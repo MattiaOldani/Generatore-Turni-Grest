@@ -63,3 +63,11 @@ La terza e ultima fase è l'__invio__, tramite bot telegram, dei turni generati 
 Mattia oppure Vittorio, dipende chi legge il messaggio per primo, salverà poi il file e lo inoltrerà nel gruppo con tutti gli animatori
 
 Questa fase è la più semplice ed è gestita dagli script presenti nel package __`telegram`__, che inviano, oltre al pdf dei turni, anche il numero di turni che ogni animatore deve fare durante la settimana
+
+## Docker
+
+Nel repository è presente un file __Docker__, che permette l'esecuzione di tutto il workflow su qualsiasi macchina si voglia utilizzare
+
+Ogni volta che il repository viene modificato viene invocato lo script __`build.sh`__, che crea la nuova immagine Docker e la pusha su [Docker Hub](https://hub.docker.com/)
+
+Per runnare poi l'immagine creata viene invocato lo script __`start.sh`__
