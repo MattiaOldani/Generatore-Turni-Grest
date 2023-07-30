@@ -23,8 +23,9 @@ ENV PATH $PATH:/application/ampl
 RUN apt install python3 python3-venv -y
 RUN python3 -m venv .
 ENV PATH $PATH:/application/bin
-RUN pip install requests pyTelegramBotAPI
 
 COPY . .
+
+RUN pip install -r requirements.txt
 
 ENTRYPOINT ["/bin/sh", "generate.sh"]
