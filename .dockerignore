@@ -1,6 +1,14 @@
+# File di docker
+.dockerignore
+Dockerfile
+
 # File di git
 .git
 .gitignore
 
 # File di github
 README.md
+
+# File di build e run
+build.sh
+start.sh
