@@ -4,7 +4,7 @@
 cd generator
 cp template.typ template_copy.typ
 
-python main.py
+python main.py $1 $2 $3
 
 # Pulizia post invio su telegram
 cp template_copy.typ template.typ

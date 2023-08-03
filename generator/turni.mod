@@ -9,6 +9,12 @@ set Giorni;
 set Animatori;
 # Disponibilità di ogni animatore nei vari giorni e nelle varie fasce orarie
 param Disponibilita {Giorni, Animatori, FasceOrarie} binary;
+# Numero di animatori richiesti per turno
+param AnimatoriPerTurno;
+# Massimo numero di ripetizioni dello stesso turno
+param MassimaRipetizioneStessoTurno;
+# Numero di turni che ogni animatore fa al massimo in un giorno
+param MassimoNumeroTurniGiornalieri;
 
 # VARIABILI
 # Assegnamento di ogni animatore ad una fascia oraria in un certo giorno
@@ -21,9 +27,9 @@ var MassimoNumeroTurni integer;
 var MinimoNumeroTurni integer;
 
 # VINCOLI
-# Presenza di 2 animatori per turno, esclusa la mensa del giovedi
+# Presenza di <AnimatoriPerTurno> animatori per turno, esclusa la mensa del giovedi
 subject to MinimoNumeroAnimatori {g in Giorni, fo in FasceOrarie : g <> '04_Giovedi' or fo <> '02_Mensa'}:
-    sum {a in Animatori} Assegnamento[g,a,fo] = 2;
+    sum {a in Animatori} Assegnamento[g,a,fo] = AnimatoriPerTurno;
 subject to MensaGiovediNoTurno:
 	sum {a in Animatori} Assegnamento['04_Giovedi',a,'02_Mensa'] = 0;
 # Definizione del numero di turni
@@ -38,12 +44,12 @@ subject to DefinizioneMinimoNumeroTurni {a in Animatori}:
 # Faccio turno solo se sono disponibile
 subject to Candidatura {g in Giorni, a in Animatori, fo in FasceOrarie}:
     Assegnamento[g,a,fo] <= Disponibilita[g,a,fo];
-# Ogni animatore ripete al massimo 2 volte lo stesso turno
+# Ogni animatore ripete al massimo <MassimaRipetizioneStessoTurno> volte lo stesso turno
 subject to MassimaRipetizionePerSettimana {a in Animatori, fo in FasceOrarie}:
-    sum {g in Giorni} Assegnamento[g,a,fo] <= 2;
-# Ogni animatore può fare al massimo 1 turno al giorno
+    sum {g in Giorni} Assegnamento[g,a,fo] <= MassimaRipetizioneStessoTurno;
+# Ogni animatore può fare al massimo <MassimoNumeroTurniGiornalieri> turni al giorno
 subject to MassimaRipetizionePerGiorno {a in Animatori, g in Giorni}:
-    sum {fo in FasceOrarie} Assegnamento[g,a,fo] <= 1;
+    sum {fo in FasceOrarie} Assegnamento[g,a,fo] <= MassimoNumeroTurniGiornalieri;
 
 # OBIETTIVO
 # Minimizzare la differenza tra massimo e minimo numero di turni
