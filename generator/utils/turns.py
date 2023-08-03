@@ -13,6 +13,14 @@ class Turns():
             return x[0].value - y[0].value
         compare = cmp_to_key(compare)
 
+        def format(name):
+            results = name[0]
+            for char in name[1:]:
+                if char.isupper():
+                    results += " "
+                results += char
+            return results
+
         turns = dict()
         animators = set()
         for slot in Slots:
@@ -24,7 +32,7 @@ class Turns():
                     results = results[i+3:]
                     break
                 else:
-                    animator = row.split(" ")[0]
+                    animator = format(row.split(" ")[0])
                     animators.add(animator)
                     keep = list(filter(lambda x : x in ("0","1"), row.split(" ")))
                     for day in Days:
@@ -41,7 +49,8 @@ class Turns():
                 row = row.strip().split(" ")
                 row = list(filter(lambda x : x != "", row))
                 for i in range(0,len(row),2):
-                    counts[row[i]] = int(row[i+1])
+                    name = format(row[i])
+                    counts[name] = int(row[i+1])
 
         max_ = int(results.pop(0).split(" ")[2])
         min_ = int(results.pop(0).split(" ")[2])
@@ -74,6 +83,7 @@ class Turns():
 
     def get_animators_turns_counts(self, sort=False, reverse=False):
         counts = list(self.counts.items())
+        counts.sort(key=lambda x : x[0])
 
         match [isinstance(sort,bool),isinstance(reverse,bool)]:
             case [True,True]:

@@ -57,21 +57,11 @@ def generate_template():
 
     turns = Turns(results)
 
-    def format(name):
-        find = name[1]
-        results = find[0]
-        for char in find[1:]:
-            if char.isupper():
-                results += " "
-            results += char
-        return (name[0], results)
-
     with open("template.typ", "a") as f:
         for slot in Slots:
             f.write(f"\t[_{slot.name}_], ")
             for day in Days:
                 animators = turns.get_animators(slot, day)
-                animators = list(map(format, animators))
                 names = ", ".join([a[1] for a in animators])
                 if names == "":
                     names = "-"
