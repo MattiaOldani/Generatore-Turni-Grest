@@ -24,7 +24,9 @@ RUN apt install python3 python3-venv -y
 RUN python3 -m venv .
 ENV PATH $PATH:/application/bin
 
-COPY . .
+COPY generator/ generator/
+COPY generate.sh generate.sh
+COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
