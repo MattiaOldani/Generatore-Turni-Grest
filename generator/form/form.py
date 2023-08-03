@@ -61,15 +61,15 @@ def generate_dat_file():
                 result = result.strip() + ";\n\n"
             f.write(result)
         
-        ANIMATORS_PER_SLOT = 2
+        ANIMATORS_PER_SLOT = -1
         f.write(f"param AnimatoriPerTurno := {ANIMATORS_PER_SLOT};\n\n")
 
-        MAX_REPETITION_SAME_SLOT = 2
+        MAX_REPETITION_SAME_SLOT = -1
         f.write(
             f"param MassimaRipetizioneStessoTurno := {MAX_REPETITION_SAME_SLOT};\n\n"
         )
 
-        MAX_NUMBER_DAILY_SLOTS = 1
+        MAX_NUMBER_DAILY_SLOTS = -1
         f.write(f"param MassimoNumeroTurniGiornalieri := {MAX_NUMBER_DAILY_SLOTS};\n")
 
 
