@@ -6,14 +6,14 @@ Questo "progetto" nasce dall'esigenza dei coordinatori del Grest di Capralba di 
 
 ## Prima fase
 
-La prima fase è la __creazione del file `data.dat`__, un file che contiene:
-- Le informazioni sulle __fasce orarie__ da coprire;
-- I __giorni__ nei quali c'è il Grest;
-- Gli __animatori__ presenti per quella settimana;
-- Le __disponibilità__ degli stessi;
-- Il __numero di animatori per turno__;
-- La __massima ripetizione dello stesso turno__;
-- Il __massimo numero di turni giornalieri__.
+La prima fase è la __creazione del file `data.dat`__, un file che contiene le informazioni su:
+- __fasce orarie__ da coprire;
+- __giorni__ nei quali c'è il Grest;
+- __animatori__ presenti per quella settimana;
+- __disponibilità__ degli stessi;
+- __numero di animatori per turno__;
+- __massima ripetizione dello stesso turno__;
+- __massimo numero di turni giornalieri__.
 
 ### Compilazione del form
 
@@ -21,9 +21,9 @@ Ogni animatore compila un [form Wufoo](https://www.wufoo.com/) tra venerdì matt
 * __nome__: se presenti più nomi ne va inserito uno solo;
 * __cognome__;
 * __disponibilità__ per le seguenti fasce orarie:
-  * Pre (dalle 08:00 alle 08:45);
-  * Mensa (dalle 12:00 alle 13:30);
-  * Post (dalle 17:00 alle 18:00).
+  * pre (dalle 08:00 alle 08:45);
+  * mensa (dalle 12:00 alle 13:30);
+  * post (dalle 17:00 alle 18:00).
 
 ### Creazione del file data.dat
 
@@ -31,7 +31,7 @@ Domenica sera, tramite gli script presenti nel package __`form`__, vengono effet
 
 Il file __`form.py`__, presente nel package `form`, va modificato inserendo i seguenti campi:
 - `ENDPOINT`: link al quale trovare le risposte del form;
-- `FORM_API_KEY`: token fornito da Wufoo per accedere alle risposte;
+- `FORM_API_KEY`: token fornito da Wufoo per accedere alle API;
 - `ANIMATORS_PER_SLOT`: numero di animatori per turno;
 - `MAX_REPETITION_SAME_SLOT`: massima ripetizione dello stesso turno;
 - `MAX_NUMBER_DAILY_SLOTS`: massimo numero di turni giornalieri.
@@ -46,9 +46,9 @@ Questa fase è la più lunga poiché richiede una prima fase di __creazione dei 
 
 Il file `data.dat`, creato nella fase precedente, viene dato in pasto al programma __`turni.mod`__, che viene compilato tramite __ampl__ da riga di comando.
 
-Questa operazione viene eseguita dagli script del package __`template`__, che successivamente catturano l'output di __ampl__ e lo passano alla successiva fase di formattazione.
+Questa operazione viene eseguita dagli script del package __`template`__, che successivamente catturano l'output di ampl e lo passano alla successiva fase di formattazione.
 
-Il risultato di questa operazione è una __matrice di assegnamento tridimensionale__ che indica, per ogni fascia oraria, quale animatore è presente e in quale giorno.
+Il risultato di questa operazione è una __matrice di assegnamento tridimensionale__, che indica, per ogni fascia oraria, quale animatore è presente e in quale giorno.
 
 ### Formattazione dei risultati
 
@@ -71,21 +71,23 @@ La terza e ultima fase è l'__invio__, tramite bot Telegram, dei turni generati 
 Questa fase è la più semplice ed è gestita dagli script presenti nel package __`telegram`__, che inviano, oltre al PDF dei turni, anche il numero di turni che ogni animatore deve fare durante la settimana.
 
 Il file __`telegram.py`__, presente nel package `telegram`, va modificato inserendo i seguenti campi:
-- `API_KEY`: token fornito da telegram per accedere alle funzionalità del bot;
+- `API_KEY`: token fornito da telegram per accedere al bot;
 - `CHANNEL_ID`: canale nel quale verrano inviate le informazione scritte poco fa.
 
 # Docker
 
 Nel repository è presente un file __Docker__, che permette l'esecuzione di tutto il workflow su qualsiasi macchina si voglia utilizzare.
 
-## Deploy
+Prima di eseguire tutto il deploy è necessario settare le variabili dei package `form` e `telegram`.
 
-Viene richiesta l'ultima versione upstream di [typst](https://github.com/typst/typst) nella root del progetto, scaricabile tramite __`git`__.
+## Build
 
-Invocare poi lo script __`build.sh`__, che crea la nuova immagine Docker e la pusha su [Docker Hub](https://hub.docker.com/).
+Viene richiesta l'ultima versione upstream di __typst__ nella root del progetto, scaricabile tramite __`git`__ dal loro [repository](https://github.com/typst/typst).
 
-Questo script va modificato inserendo le proprie credenziali per avere la versione aggiornata dell'immagine Docker.
+Per creare l'immagine Docker invocare lo script __`build.sh`__, che la andrà poi a pushare su [Docker Hub](https://hub.docker.com/) in un repository privato.
 
-Per runnare infine l'immagine creata viene invocato lo script __`start.sh`__, anch'esso da modificare con le proprie credenziali.
+Questo script va modificato inserendo le [proprie credenziali](https://docs.docker.com/engine/reference/commandline/login/) di Docker Hub per avere la propria versione di questa immagine sia in locale che su Docker Hub; se non si volesse eseguire il push in un proprio repository Docker Hub, rimuovere l'istruzione di `docker push`.
 
-Prima di eseguire tutto il deploy è importante settare le variabili d'ambiente dei package `form` e `telegram`.
+## Run
+
+Per runnare l'immagine creata viene invocato lo script __`start.sh`__, anch'esso da modificare con le proprie credenziali.
