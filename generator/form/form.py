@@ -5,11 +5,7 @@ from utils.days import Days
 from utils.slots import Slots
 
 
-def generate_dat_file(
-        animators_per_slot,
-        max_repetition_same_slot,
-        max_number_daily_slots
-    ):
+def generate_dat_file():
     ENDPOINT = "http://USERNAME.wufoo.com/api/v3/forms/FORM_HASH/entries.json?pageSize=100"
     FORM_API_KEY = "API_KEY"
 
@@ -65,13 +61,16 @@ def generate_dat_file(
                 result = result.strip() + ";\n\n"
             f.write(result)
         
-        f.write(f"param AnimatoriPerTurno := {animators_per_slot};\n\n")
+        ANIMATORS_PER_SLOT = 2
+        f.write(f"param AnimatoriPerTurno := {ANIMATORS_PER_SLOT};\n\n")
 
+        MAX_REPETITION_SAME_SLOT = 2
         f.write(
-            f"param MassimaRipetizioneStessoTurno := {max_repetition_same_slot};\n\n"
+            f"param MassimaRipetizioneStessoTurno := {MAX_REPETITION_SAME_SLOT};\n\n"
         )
 
-        f.write(f"param MassimoNumeroTurniGiornalieri := {max_number_daily_slots};\n")
+        MAX_NUMBER_DAILY_SLOTS = 1
+        f.write(f"param MassimoNumeroTurniGiornalieri := {MAX_NUMBER_DAILY_SLOTS};\n")
 
 
 if __name__ == "__main__":
