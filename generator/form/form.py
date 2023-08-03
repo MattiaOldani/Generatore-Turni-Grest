@@ -21,7 +21,8 @@ def generate_dat_file():
     turns = dict()
     names = list()
     for entry in entries:
-        name = ''.join(entry["Field2"].strip().split(" ")) + entry["Field1"].strip()
+        surname = ''.join(entry["Field2"].strip().split(" "))
+        name = surname + ''.join(entry["Field1"].strip().split(" "))
         names.append(name)
         
         pre = list()
