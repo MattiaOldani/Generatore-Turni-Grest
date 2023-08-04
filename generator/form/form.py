@@ -1,18 +1,24 @@
 import base64
+import os
 import requests
+
+from dotenv import load_dotenv
 
 from utils.days import Days
 from utils.slots import Slots
 
 
 def generate_dat_file():
-    ENDPOINT = "http://USERNAME.wufoo.com/api/v3/forms/FORM_HASH/entries.json?pageSize=100"
-    FORM_API_KEY = "API_KEY"
+    load_dotenv()
+    environment = os.environ
+
+    FORM_ENDPOINT = environment["FORM_ENDPOINT"]
+    FORM_API_KEY = environment["FORM_API_KEY"]
 
     authcode = base64.b64encode(f"{FORM_API_KEY}:ciao".encode()).decode()
     headers = {"Authorization" : f"Basic {authcode}"}
 
-    entries = requests.get(ENDPOINT, headers=headers).json()["Entries"]
+    entries = requests.get(FORM_ENDPOINT, headers=headers).json()["Entries"]
 
     PRE = ["Field105", "Field106", "Field107", "Field108", "Field109"]
     MENSA = ["Field305", "Field306", "Field307", "Field309"]
@@ -62,15 +68,15 @@ def generate_dat_file():
                 result = result.strip() + ";\n\n"
             f.write(result)
         
-        ANIMATORS_PER_SLOT = -1
+        ANIMATORS_PER_SLOT = environment["ANIMATORS_PER_SLOT"]
         f.write(f"param AnimatoriPerTurno := {ANIMATORS_PER_SLOT};\n\n")
 
-        MAX_REPETITION_SAME_SLOT = -1
+        MAX_REPETITION_SAME_SLOT = environment["MAX_REPETITION_SAME_SLOT"]
         f.write(
             f"param MassimaRipetizioneStessoTurno := {MAX_REPETITION_SAME_SLOT};\n\n"
         )
 
-        MAX_NUMBER_DAILY_SLOTS = -1
+        MAX_NUMBER_DAILY_SLOTS = environment["MAX_NUMBER_DAILY_SLOTS"]
         f.write(f"param MassimoNumeroTurniGiornalieri := {MAX_NUMBER_DAILY_SLOTS};\n")
 
 

@@ -1,12 +1,17 @@
+import os
 import telebot
 
+from dotenv import load_dotenv
 
-API_KEY = "API_KEY"
-CHANNEL_ID = -1
+
+load_dotenv()
+environment = os.environ
+TELEGRAM_API_KEY = environment["TELEGRAM_API_KEY"]
+CHANNEL_ID = environment["CHANNEL_ID"]
 
 
 def send_pdf(filename):
-    bot = telebot.TeleBot(API_KEY)
+    bot = telebot.TeleBot(TELEGRAM_API_KEY)
 
     with open(filename, "rb") as f:
         caption = "*Turni della settimana*"
@@ -14,7 +19,7 @@ def send_pdf(filename):
 
 
 def send_turns(turns):
-    bot = telebot.TeleBot(API_KEY)
+    bot = telebot.TeleBot(TELEGRAM_API_KEY)
 
     counts = turns.get_animators_turns_counts(sort=True)
     message = '\n'.join(
