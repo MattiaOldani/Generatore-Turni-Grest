@@ -1,13 +1,14 @@
 # https://github.com/typst/typst/blob/main/Dockerfile
 FROM rust:alpine AS build
-COPY typst /app
-WORKDIR /app
+RUN apk add --update git
+RUN git clone https://github.com/typst/typst
+WORKDIR /typst
 ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 RUN apk add --update musl-dev && cargo build -p typst-cli --release
 
 # ampl e python
 FROM ubuntu:latest
-COPY --from=build /app/target/release/typst /bin
+COPY --from=build /typst/target/release/typst /bin
 
 WORKDIR /application
 
@@ -25,9 +26,9 @@ RUN python3 -m venv .
 ENV PATH $PATH:/application/bin
 
 COPY generator/ generator/
-COPY generate.sh generate.sh
+COPY start.sh start.sh
 COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["/bin/sh", "generate.sh"]
+ENTRYPOINT ["/bin/sh", "start.sh"]
