@@ -1,33 +1,27 @@
 # https://github.com/typst/typst/blob/main/Dockerfile
-FROM rust:alpine AS build
-RUN apk add --update git
-RUN git clone https://github.com/typst/typst
-WORKDIR /typst
-ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
-RUN apk add --update musl-dev && cargo build -p typst-cli --release
+FROM ghcr.io/typst/typst:latest AS build
 
-# ampl e python
 FROM ubuntu:latest
-COPY --from=build /typst/target/release/typst /bin
+COPY --from=build /bin/typst /bin
 
 WORKDIR /application
 
 RUN apt update && apt upgrade -y
 
-RUN apt install wget -y
-RUN wget https://homes.di.unimi.it/righini/Didattica/ampl_linux-intel64.tgz
-RUN tar -zxvf ampl_linux-intel64.tgz
-RUN rm ampl_linux-intel64.tgz
-RUN mv ampl_linux-intel64 ampl
-ENV PATH $PATH:/application/ampl
+RUN apt install python3 python3-venv wget -y
 
-RUN apt install python3 python3-venv -y
-RUN python3 -m venv .
-ENV PATH $PATH:/application/bin
+RUN wget https://homes.di.unimi.it/righini/Didattica/ampl_linux-intel64.tgz && \
+    tar -zxvf ampl_linux-intel64.tgz && \
+    rm ampl_linux-intel64.tgz && \
+    mv ampl_linux-intel64 ampl
+
+RUN python3 -m venv venv
+
+ENV PATH $PATH:/application/venv/bin:/application/ampl
 
 COPY generator/ generator/
-COPY start.sh start.sh
 COPY requirements.txt requirements.txt
+COPY start.sh start.sh
 
 RUN pip install -r requirements.txt
 
