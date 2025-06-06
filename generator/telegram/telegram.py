@@ -22,13 +22,9 @@ def send_turns(turns):
     bot = telebot.TeleBot(TELEGRAM_API_KEY)
 
     counts = turns.get_animators_turns_counts(sort=True)
-    message = '\n'.join(
+    message = "\n".join(
         ["*Numero di turni per animatore*"]
-        +
-        list(map(
-            lambda x : f"{x[0]}: {x[1]}",
-            counts
-        ))
+        + list(map(lambda x: f"{x[0]}: {x[1]}", counts))
     )
     bot.send_message(CHANNEL_ID, message, parse_mode="markdown")
 

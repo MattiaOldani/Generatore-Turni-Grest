@@ -16,10 +16,12 @@ def generate_dat_file():
     FORM_API_KEY = environment["FORM_API_KEY"]
 
     authcode = base64.b64encode(f"{FORM_API_KEY}:ciao".encode()).decode()
-    headers = {"Authorization" : f"Basic {authcode}"}
+    headers = {"Authorization": f"Basic {authcode}"}
     params = {"pageSize": 100}
 
-    entries = requests.get(FORM_ENDPOINT, headers=headers, params=params).json()["Entries"]
+    entries = requests.get(FORM_ENDPOINT, headers=headers, params=params).json()[
+        "Entries"
+    ]
 
     PRE = ["Field105", "Field106", "Field107", "Field108", "Field109"]
     MENSA = ["Field305", "Field306", "Field307", "Field308", "Field309"]
@@ -28,14 +30,24 @@ def generate_dat_file():
     turns = dict()
     names = list()
     for entry in entries:
-        surname = ''.join([s.capitalize() for s in entry["Field2"].strip().replace("'", "").split(" ")])
-        name = surname + ''.join([n.capitalize() for n in entry["Field1"].strip().replace("'", "").split(" ")])
+        surname = "".join(
+            [
+                s.capitalize()
+                for s in entry["Field2"].strip().replace("'", "").split(" ")
+            ]
+        )
+        name = surname + "".join(
+            [
+                n.capitalize()
+                for n in entry["Field1"].strip().replace("'", "").split(" ")
+            ]
+        )
         names.append(name)
-        
+
         pre = list()
         for field in PRE:
             pre.append("0" if entry[field] == "" else "1")
-        
+
         mensa = list()
         for field in MENSA:
             mensa.append("0" if entry[field] == "" else "1")
@@ -43,18 +55,18 @@ def generate_dat_file():
         post = list()
         for field in POST:
             post.append("0" if entry[field] == "" else "1")
-        
-        turns[name] = [pre, mensa, post] 
+
+        turns[name] = [pre, mensa, post]
 
     with open("data.dat", "w") as f:
-        slots = [f"0{s.value+1}_{s.name}" for s in Slots]
+        slots = [f"0{s.value + 1}_{s.name}" for s in Slots]
         f.write(f"set FasceOrarie := {' '.join(slots)};\n\n")
-        
-        days = [f"0{day.value+1}_{day.name}" for day in Days]
+
+        days = [f"0{day.value + 1}_{day.name}" for day in Days]
         f.write(f"set Giorni := {' '.join(days)};\n\n")
-        
+
         f.write(f"set Animatori := {' '.join(names)};\n\n")
-        
+
         f.write(f"param Disponibilita: {' '.join(slots)} :=\n")
 
         for day in Days:
@@ -67,9 +79,12 @@ def generate_dat_file():
             if day.value == 4:
                 result = result.strip() + ";\n\n"
             f.write(result)
-        
-        ANIMATORS_PER_SLOT = environment["ANIMATORS_PER_SLOT"]
-        f.write(f"param AnimatoriPerTurno := {ANIMATORS_PER_SLOT};\n\n")
+
+        ANIMATORS_PRE_AND_POST = environment["ANIMATORS_PRE_AND_POST"]
+        f.write(f"param AnimatoriPrePost := {ANIMATORS_PRE_AND_POST};\n\n")
+
+        ANIMATORS_LUNCH = environment["ANIMATORS_LUNCH"]
+        f.write(f"param AnimatoriMensa := {ANIMATORS_LUNCH};\n\n")
 
         ANIMATORS_SHARE_LUNCH = environment["ANIMATORS_SHARE_LUNCH"]
         f.write(f"param AnimatoriPranzoCondiviso := {ANIMATORS_SHARE_LUNCH};\n\n")

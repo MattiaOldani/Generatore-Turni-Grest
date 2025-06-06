@@ -15,9 +15,7 @@ def __parse_file(filename: str):
     variables = list()
     for line in contents:
         if line.startswith("var"):
-            result = re.findall(
-                re.compile(r"(?<=var )(\w+)"), line
-            )
+            result = re.findall(re.compile(r"(?<=var )(\w+)"), line)
             if result is not None:
                 variables.append(result[0])
 
@@ -68,7 +66,7 @@ def generate_template():
                 f.write(f"[{names}], ")
             f.write("\n")
         f.write(")\n")
-    
+
     return turns
 
 

@@ -9,8 +9,10 @@ set Giorni;
 set Animatori;
 # Disponibilità di ogni animatore nei vari giorni e nelle varie fasce orarie
 param Disponibilita {Giorni, Animatori, FasceOrarie} binary;
-# Numero di animatori richiesti per turno
-param AnimatoriPerTurno;
+# Numero di animatori richiesti per pre e post
+param AnimatoriPrePost;
+# Numero di animatori richiesti per la mensa
+param AnimatoriMensa;
 # Numero di animatori richiesti al pranzo condiviso
 param AnimatoriPranzoCondiviso;
 # Massimo numero di ripetizioni dello stesso turno
@@ -29,10 +31,13 @@ var MassimoNumeroTurni integer;
 var MinimoNumeroTurni integer;
 
 # VINCOLI
-# Presenza di <AnimatoriPerTurno> animatori per turno, esclusa la mensa del giovedi
-subject to MinimoNumeroAnimatori {g in Giorni, fo in FasceOrarie : g <> '04_Giovedi' or fo <> '02_Mensa'}:
-    sum {a in Animatori} Assegnamento[g,a,fo] = AnimatoriPerTurno;
-# Presenza di <AnimatoriPranzoCondiviso> animatori per turno, esclusa la mensa del giovedi
+# Presenza di <AnimatoriPrePost> animatori a pre e post
+subject to NumeroAnimatoriPrePost {g in Giorni, fo in FasceOrarie : fo = '01_Pre' or fo = '03_Post'}:
+    sum {a in Animatori} Assegnamento[g,a,fo] = AnimatoriPrePost;
+# Presenza di <AnimatoriMensa> animatori alla mensa
+subject to NumeroAnimatoriMensa {g in Giorni : g <> '04_Giovedi'}:
+    sum {a in Animatori} Assegnamento[g,a,'02_Mensa'] = AnimatoriMensa;
+# Presenza di <AnimatoriPranzoCondiviso> animatori al pranzo condiviso
 subject to NumeroAnimatoriPranzoCondiviso:
 	sum {a in Animatori} Assegnamento['04_Giovedi',a,'02_Mensa'] = AnimatoriPranzoCondiviso;
 # Definizione del numero di turni
