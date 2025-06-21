@@ -80,8 +80,11 @@ def generate_dat_file():
                 result = result.strip() + ";\n\n"
             f.write(result)
 
-        ANIMATORS_PRE_AND_POST = environment["ANIMATORS_PRE_AND_POST"]
-        f.write(f"param AnimatoriPrePost := {ANIMATORS_PRE_AND_POST};\n\n")
+        ANIMATORS_PRE = environment["ANIMATORS_PRE"]
+        f.write(f"param AnimatoriPre := {ANIMATORS_PRE};\n\n")
+
+        ANIMATORS_POST = environment["ANIMATORS_POST"]
+        f.write(f"param AnimatoriPost := {ANIMATORS_POST};\n\n")
 
         ANIMATORS_LUNCH = environment["ANIMATORS_LUNCH"]
         f.write(f"param AnimatoriMensa := {ANIMATORS_LUNCH};\n\n")
