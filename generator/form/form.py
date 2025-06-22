@@ -1,15 +1,13 @@
-import os
+import json
 import requests
 
-from dotenv import load_dotenv
-
-from utils.days import Days
-from utils.slots import Slots
+from generator.utils.days import Days
+from generator.utils.slots import Slots
 
 
 def generate_dat_file():
-    load_dotenv()
-    environment = os.environ
+    with open("environment.json", "r") as f:
+        environment = json.load(f)
 
     FORM_ENDPOINT = environment["FORM_ENDPOINT"]
     FORM_API_KEY = environment["FORM_API_KEY"]

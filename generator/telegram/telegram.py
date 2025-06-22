@@ -1,11 +1,9 @@
-import os
+import json
 import telebot
 
-from dotenv import load_dotenv
 
-
-load_dotenv()
-environment = os.environ
+with open("environment.json", "r") as f:
+    environment = json.load(f)
 TELEGRAM_API_KEY = environment["TELEGRAM_API_KEY"]
 CHANNEL_ID = environment["CHANNEL_ID"]
 

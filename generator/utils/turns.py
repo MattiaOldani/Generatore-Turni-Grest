@@ -1,7 +1,7 @@
 from functools import cmp_to_key
 
-from utils.days import Days
-from utils.slots import Slots
+from generator.utils.days import Days
+from generator.utils.slots import Slots
 
 
 class Turns:

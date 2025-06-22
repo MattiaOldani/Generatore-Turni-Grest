@@ -2,9 +2,9 @@ import os
 import re
 import subprocess
 
-from utils.days import Days
-from utils.slots import Slots
-from utils.turns import Turns
+from generator.utils.days import Days
+from generator.utils.slots import Slots
+from generator.utils.turns import Turns
 
 
 def __parse_file(filename: str):

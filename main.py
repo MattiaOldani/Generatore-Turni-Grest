@@ -1,9 +1,9 @@
 import os
 import subprocess
 
-from form.form import generate_dat_file
-from telegram.telegram import send_pdf, send_turns
-from template.template import generate_template
+from generator.form.form import generate_dat_file
+from generator.telegram.telegram import send_pdf, send_turns
+from generator.template.template import generate_template
 
 
 def main():
