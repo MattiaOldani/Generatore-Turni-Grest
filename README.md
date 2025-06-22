@@ -1,18 +1,23 @@
 # Generatore turni Grest
 
-Questo "progetto" nasce dall'esigenza dei coordinatori del Grest di Capralba di poter organizzare i turni degli animatori in modo rapido e senza perdite di tempo.
+Questo progetto nasce dall'esigenza dei coordinatori del Grest di Capralba di poter organizzare i turni degli animatori in modo rapido e senza perdite di tempo.
+
+Sto scherzando, ho fatto questo perché sono tremendamente pigro.
 
 ## Workflow
 
 ### Fase preliminare
 
-La fase preliminare di tutto il workflow è il __setup dell'environment__, che viene effettuato modificando il file __`.env`__ dentro la cartella __`generator`__.
+La fase preliminare di tutto il workflow è il __setup dell'environment__, che viene effettuato modificando il file __`environment.json`__.
 
 Devono essere inserite le seguenti variabili d'ambiente:
 - per quanto riguarda il package `form`:
-  - `FORM_API_KEY`: token fornito da Wufoo per accedere alle API;
+  - `FORM_API_KEY`: token fornito da Tally per accedere alle API;
   - `FORM_ENDPOINT`: link al quale trovare le risposte del form;
-  - `ANIMATORS_PER_SLOT`: numero di animatori per turno;
+  - `ANIMATORS_PRE`: numero di animatori al pre;
+  - `ANIMATORS_POST`: numero di animatori al post;
+  - `ANIMATORS_LUNCH`: numero di animatori in mensa;
+  - `ANIMATORS_SHARE_LUNCH`: numero di animatori al pranzo condiviso;
   - `MAX_NUMBER_DAILY_SLOTS`: massimo numero di turni giornalieri;
   - `MAX_REPETITION_SAME_SLOT`: massima ripetizione dello stesso turno;
 - per quanto riguarda il package `telegram`:
@@ -25,24 +30,24 @@ La prima fase è la __creazione del file `data.dat`__, un file che contiene le i
 - __fasce orarie__ da coprire;
 - __giorni__ nei quali c'è il Grest;
 - __animatori__ presenti per quella settimana;
-- __disponibilità__ degli stessi;
+- __disponibilità__ e __necessità__ degli stessi;
 - __numero di animatori per turno__;
 - __massima ripetizione dello stesso turno__;
 - __massimo numero di turni giornalieri__.
 
 #### Compilazione del form
 
-Ogni animatore compila un [form Wufoo](https://www.wufoo.com/) tra venerdì mattina e domenica pomeriggio, dove inserisce:
+Ogni animatore compila un [form Tally](https://tally.so) tra venerdì mattina e domenica pomeriggio, dove inserisce:
 * __nome__;
 * __cognome__;
-* __disponibilità__ per le seguenti fasce orarie:
+* __disponibilità__ e __necessità__ per le seguenti fasce orarie:
   * pre (dalle 08:00 alle 08:45);
   * mensa (dalle 12:00 alle 13:30);
   * post (dalle 17:00 alle 18:00).
 
 #### Creazione del file data.dat
 
-Domenica sera, tramite gli script presenti nel package __`form`__, vengono effettuate delle richieste HTTP alle API fornite da Wufoo per scaricare le risposte date dagli animatori e popolare il file __`data.dat`__.
+Domenica sera, tramite gli script presenti nel package __`form`__, vengono effettuate delle richieste HTTP alle API fornite da Tally per scaricare le risposte date dagli animatori e popolare il file __`data.dat`__.
 
 ### Seconda fase
 
