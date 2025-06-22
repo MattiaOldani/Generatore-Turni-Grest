@@ -6,7 +6,6 @@ from utils.slots import Slots
 
 class Turns:
     def __init__(self, data: str) -> None:
-        # Parsing
         results = data.split("\n")[4:][::-1][2:][::-1]
 
         def compare(x, y):
@@ -59,7 +58,6 @@ class Turns:
         results.pop(0)
         objective = int(results.pop().split(" ")[2])
 
-        # Variabili di istanza
         self.max_ = max_
         self.min_ = min_
         self.animators = animators

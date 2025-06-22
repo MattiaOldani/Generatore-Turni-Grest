@@ -1,4 +1,3 @@
-import base64
 import os
 import requests
 
@@ -15,46 +14,49 @@ def generate_dat_file():
     FORM_ENDPOINT = environment["FORM_ENDPOINT"]
     FORM_API_KEY = environment["FORM_API_KEY"]
 
-    authcode = base64.b64encode(f"{FORM_API_KEY}:ciao".encode()).decode()
-    headers = {"Authorization": f"Basic {authcode}"}
-    params = {"pageSize": 100}
+    headers = {"Authorization": f"Bearer {FORM_API_KEY}"}
 
-    entries = requests.get(FORM_ENDPOINT, headers=headers, params=params).json()[
-        "Entries"
-    ]
+    entries = requests.get(FORM_ENDPOINT, headers=headers).json()["submissions"]
 
-    PRE = ["Field105", "Field106", "Field107", "Field108", "Field109"]
-    MENSA = ["Field305", "Field306", "Field307", "Field308", "Field309"]
-    POST = ["Field205", "Field206", "Field207", "Field208", "Field209"]
+    DAYS = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"]
 
     turns = dict()
     names = list()
     for entry in entries:
+        entry = entry["responses"]
+
         surname = "".join(
             [
                 s.capitalize()
-                for s in entry["Field2"].strip().replace("'", "").split(" ")
+                for s in entry.pop(1)["answer"].strip().replace("'", "").split()
             ]
         )
+
         name = surname + "".join(
             [
                 n.capitalize()
-                for n in entry["Field1"].strip().replace("'", "").split(" ")
+                for n in entry.pop(0)["answer"].strip().replace("'", "").split()
             ]
         )
+
         names.append(name)
 
-        pre = list()
-        for field in PRE:
-            pre.append("0" if entry[field] == "" else "1")
+        pre = [0, 0, 0, 0, 0]
+        mensa = [0, 0, 0, 0, 0]
+        post = [0, 0, 0, 0, 0]
 
-        mensa = list()
-        for field in MENSA:
-            mensa.append("0" if entry[field] == "" else "1")
-
-        post = list()
-        for field in POST:
-            post.append("0" if entry[field] == "" else "1")
+        for other in entry:
+            answers = other["answer"]
+            match other["questionId"]:
+                case "ApJN0e":
+                    for answer in answers:
+                        pre[DAYS.index(answer)] = 1
+                case "Bp1qgR":
+                    for answer in answers:
+                        mensa[DAYS.index(answer)] = 1
+                case "kGAXpo":
+                    for answer in answers:
+                        post[DAYS.index(answer)] = 1
 
         turns[name] = [pre, mensa, post]
 
