@@ -18,24 +18,43 @@ def generate_dat_file():
 
     entries = requests.get(FORM_ENDPOINT, headers=headers).json()["submissions"]
 
-    DAYS = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"]
+    PRE_POST_INDEX = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"]
+
+    LUNCH_INDEX = [
+        "Lunedì",
+        "Martedì",
+        "Mercoledì",
+        "Giovedì [pranzo condiviso]",
+        "Venerdì",
+    ]
 
     turns = dict()
+    must_turns = dict()
     names = list()
+    ban_names = set()
+    need_names = dict()
     for entry in entries:
         entry = entry["responses"]
 
         surname = "".join(
             [
                 s.capitalize()
-                for s in entry.pop(1)["answer"].strip().replace("'", "").split()
+                for s in entry.pop(1)["answer"]
+                .strip()
+                .replace("'", "")
+                .replace('"', "")
+                .split()
             ]
         )
 
         name = surname + "".join(
             [
                 n.capitalize()
-                for n in entry.pop(0)["answer"].strip().replace("'", "").split()
+                for n in entry.pop(0)["answer"]
+                .strip()
+                .replace("'", "")
+                .replace('"', "")
+                .split()
             ]
         )
 
@@ -45,20 +64,57 @@ def generate_dat_file():
         mensa = [0, 0, 0, 0, 0]
         post = [0, 0, 0, 0, 0]
 
+        must_pre = [0, 0, 0, 0, 0]
+        must_mensa = [0, 0, 0, 0, 0]
+        must_post = [0, 0, 0, 0, 0]
+
+        must_flag = 0
         for other in entry:
             answers = other["answer"]
+
+            if len(answers) == 0:
+                continue
+
             match other["questionId"]:
                 case "ApJN0e":
+                    must_flag = 1
                     for answer in answers:
-                        pre[DAYS.index(answer)] = 1
+                        must_pre[PRE_POST_INDEX.index(answer)] = 1
                 case "Bp1qgR":
+                    must_flag = 1
                     for answer in answers:
-                        mensa[DAYS.index(answer)] = 1
+                        must_mensa[LUNCH_INDEX.index(answer)] = 1
                 case "kGAXpo":
+                    must_flag = 1
                     for answer in answers:
-                        post[DAYS.index(answer)] = 1
+                        must_post[PRE_POST_INDEX.index(answer)] = 1
+                case "rOEjxN":
+                    for answer in answers:
+                        pre[PRE_POST_INDEX.index(answer)] = 1
+                case "47j4WX":
+                    for answer in answers:
+                        mensa[LUNCH_INDEX.index(answer)] = 1
+                case "joxada":
+                    for answer in answers:
+                        post[PRE_POST_INDEX.index(answer)] = 1
+
+        for i in range(len(pre)):
+            if must_pre[i] == 1:
+                if pre[i] == 1:
+                    ban_names.add(name)
+                pre[i] = 0
+            if must_mensa[i] == 1:
+                if mensa[i] == 1:
+                    ban_names.add(name)
+                mensa[i] = 0
+            if must_post[i] == 1:
+                if post[i] == 1:
+                    ban_names.add(name)
+                post[i] = 0
 
         turns[name] = [pre, mensa, post]
+        must_turns[name] = [must_pre, must_mensa, must_post]
+        need_names[name] = must_flag
 
     with open("data.dat", "w") as f:
         slots = [f"0{s.value + 1}_{s.name}" for s in Slots]
@@ -82,6 +138,25 @@ def generate_dat_file():
                 result = result.strip() + ";\n\n"
             f.write(result)
 
+        f.write(f"param Necessita: {' '.join(slots)} :=\n")
+
+        for day in Days:
+            result = str()
+            for name in names:
+                result = f"{result}{days[day.value]} {name} "
+                must_turn = must_turns[name]
+                must_turn = f"{must_turn[0][day.value]} {must_turn[1][day.value]} {must_turn[2][day.value]}"
+                result = f"{result}{must_turn}\n"
+            if day.value == 4:
+                result = result.strip() + ";\n\n"
+            f.write(result)
+
+        f.write("param HannoNecessita :=\n")
+
+        for name in names:
+            f.write(f"{name} {need_names[name]}\n")
+        f.write(";\n\n")
+
         ANIMATORS_PRE = environment["ANIMATORS_PRE"]
         f.write(f"param AnimatoriPre := {ANIMATORS_PRE};\n\n")
 
@@ -101,6 +176,8 @@ def generate_dat_file():
 
         MAX_NUMBER_DAILY_SLOTS = environment["MAX_NUMBER_DAILY_SLOTS"]
         f.write(f"param MassimoNumeroTurniGiornalieri := {MAX_NUMBER_DAILY_SLOTS};\n")
+
+    return ban_names if len(ban_names) > 0 else None
 
 
 if __name__ == "__main__":

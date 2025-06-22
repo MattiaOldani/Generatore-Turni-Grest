@@ -9,6 +9,10 @@ set Giorni;
 set Animatori;
 # Disponibilità di ogni animatore nei vari giorni e nelle varie fasce orarie
 param Disponibilita {Giorni, Animatori, FasceOrarie} binary;
+# Necessità di ogni animatore nei vari giorni e nelle varie fasce orarie
+param Necessita {Giorni, Animatori, FasceOrarie} binary;
+# Se gli animatori hanno necessità di qualche turno
+param HannoNecessita {Animatori} binary;
 # Numero di animatori richiesti per il pre
 param AnimatoriPre;
 # Numero di animatori richiesti per il post
@@ -31,6 +35,8 @@ var NumeroTurni {Animatori} integer;
 var MassimoNumeroTurni integer;
 # Minimo numero di turni fatti da un animatore
 var MinimoNumeroTurni integer;
+# Turni fatti da animatori con necessità
+var NumeriTurniNecessita {Animatori} integer >= 0;
 
 # VINCOLI
 # Presenza di <AnimatoriPre> animatori al pre
@@ -50,13 +56,26 @@ subject to DefinizioneNumeroTurni {a in Animatori}:
     NumeroTurni[a] = sum {g in Giorni, fo in FasceOrarie} Assegnamento[g,a,fo];
 # Definizione del massimo numero di turni
 subject to DefinizioneMassimoNumeroTurni {a in Animatori}:
-    MassimoNumeroTurni >= NumeroTurni[a];
+    MassimoNumeroTurni >= (1 - HannoNecessita[a]) * NumeroTurni[a];
 # Definizione del minimo numero di turni
 subject to DefinizioneMinimoNumeroTurni {a in Animatori}:
     MinimoNumeroTurni <= NumeroTurni[a];
+# Definizione del numero di turni di chi ha necessità
+subject to DefinizioneNumeroTurniNecessita {a in Animatori}:
+    NumeriTurniNecessita[a] = HannoNecessita[a] * (
+        (sum {g1 in Giorni, fo1 in FasceOrarie} Assegnamento[g1,a,fo1])
+        -
+        (sum {g2 in Giorni, fo2 in FasceOrarie} Necessita[g2,a,fo2])
+    );
+# Non diamo turni a chi ha delle necessità
+subject to PerdonoDivino:
+    sum {a in Animatori} NumeriTurniNecessita[a] = 0;
+# Se ho necessità devo essere messo in quel turno
+subject to SoddisfareLeNecessita {g in Giorni, a in Animatori, fo in FasceOrarie : Necessita[g,a,fo] = 1}:
+    Assegnamento[g,a,fo] = Necessita[g,a,fo];
 # Faccio turno solo se sono disponibile
 subject to Candidatura {g in Giorni, a in Animatori, fo in FasceOrarie}:
-    Assegnamento[g,a,fo] <= Disponibilita[g,a,fo];
+    Assegnamento[g,a,fo] <= Disponibilita[g,a,fo] + Necessita[g,a,fo];
 # Ogni animatore ripete al massimo <MassimaRipetizioneStessoTurno> volte lo stesso turno
 subject to MassimaRipetizionePerSettimana {a in Animatori, fo in FasceOrarie}:
     sum {g in Giorni} Assegnamento[g,a,fo] <= MassimaRipetizioneStessoTurno;

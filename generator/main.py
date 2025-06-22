@@ -7,7 +7,9 @@ from template.template import generate_template
 
 
 def main():
-    generate_dat_file()
+    ban_names = generate_dat_file()
+
+    print(f"Animatori che non sanno leggere quello che scrivo: {ban_names}")
 
     turns = generate_template()
 
