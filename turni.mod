@@ -77,10 +77,10 @@ subject to SoddisfareLeNecessita {g in Giorni, a in Animatori, fo in FasceOrarie
 subject to Candidatura {g in Giorni, a in Animatori, fo in FasceOrarie}:
     Assegnamento[g,a,fo] <= Disponibilita[g,a,fo] + Necessita[g,a,fo];
 # Ogni animatore ripete al massimo <MassimaRipetizioneStessoTurno> volte lo stesso turno
-subject to MassimaRipetizionePerSettimana {a in Animatori, fo in FasceOrarie}:
+subject to MassimaRipetizionePerSettimana {a in Animatori, fo in FasceOrarie : HannoNecessita[a] = 0}:
     sum {g in Giorni} Assegnamento[g,a,fo] <= MassimaRipetizioneStessoTurno;
 # Ogni animatore può fare al massimo <MassimoNumeroTurniGiornalieri> turni al giorno
-subject to MassimaRipetizionePerGiorno {a in Animatori, g in Giorni}:
+subject to MassimaRipetizionePerGiorno {a in Animatori, g in Giorni : HannoNecessita[a] = 0}:
     sum {fo in FasceOrarie} Assegnamento[g,a,fo] <= MassimoNumeroTurniGiornalieri;
 
 # OBIETTIVO
