@@ -21,7 +21,7 @@ Devono essere inserite le seguenti variabili d'ambiente:
   - `MAX_NUMBER_DAILY_SLOTS`: massimo numero di turni giornalieri;
   - `MAX_REPETITION_SAME_SLOT`: massima ripetizione dello stesso turno;
 - per quanto riguarda il package `telegram`:
-  - `CHANNEL_ID`: canale nel quale verrano inviati i risultati del workflow;
+  - `CHANNEL_ID`: canale nel quale verranno inviati i risultati del workflow;
   - `TELEGRAM_API_KEY`: token fornito da telegram per accedere al bot.
 
 ### Prima fase
