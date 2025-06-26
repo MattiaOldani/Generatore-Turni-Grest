@@ -43,10 +43,11 @@ def generate_dat_file():
                 surname_index = i
                 break
 
-        surname = "".join(
-            s.strip().capitalize()
-            for s in entry.pop(surname_index)["answer"].strip().split()
-        )
+        surname = entry.pop(surname_index)["answer"].strip()
+        while "  " in surname:
+            surname = surname.replace("  ", " ")
+
+        surname = "".join(s.strip().capitalize() for s in surname.split())
 
         name_index = 0
         for i, answer in enumerate(entry):
@@ -54,10 +55,11 @@ def generate_dat_file():
                 name_index = i
                 break
 
-        name = surname + "".join(
-            s.strip().capitalize()
-            for s in entry.pop(name_index)["answer"].strip().split()
-        )
+        name = entry.pop(name_index)["answer"].strip()
+        while "  " in name:
+            name = name.replace("  ", " ")
+
+        name = surname + "".join(s.strip().capitalize() for s in name.split())
 
         names.append(name)
 
