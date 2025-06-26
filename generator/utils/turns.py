@@ -6,7 +6,14 @@ from generator.utils.slots import Slots
 
 class Turns:
     def __init__(self, data: str) -> None:
-        results = data.split("\n")[4:][::-1][2:][::-1]
+        raw_results = data.split("\n")[3:][::-1][2:][::-1]
+
+        results = []
+        for result in raw_results:
+            if not result.startswith("# $"):
+                results += [result]
+
+        results = results[1:]
 
         def compare(x, y):
             return x[0].value - y[0].value
