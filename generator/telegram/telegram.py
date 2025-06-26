@@ -1,4 +1,5 @@
 import json
+import os
 import telebot
 
 
@@ -25,6 +26,12 @@ def send_turns(turns):
         + list(map(lambda x: f"{x[0]}: {x[1]}", counts))
     )
     bot.send_message(CHANNEL_ID, message, parse_mode="markdown")
+
+    os.rename("turni_obbligatori.txt", "vecchi_turni_obbligatori.txt")
+
+    no_turns = [name for name, _ in filter(lambda x: x[1] == 0, counts)]
+    with open("turni_obbligatori.txt", "w") as f:
+        f.write("\n".join(["".join(name.split()) for name in no_turns]) + "\n")
 
 
 if __name__ == "__main__":
