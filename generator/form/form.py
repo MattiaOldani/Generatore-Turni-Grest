@@ -26,6 +26,9 @@ def generate_dat_file():
         "Venerdì",
     ]
 
+    SURNAME_ID = "bekXD1"
+    NAME_ID = "7KDOe0"
+
     turns = dict()
     must_turns = dict()
     names = list()
@@ -34,26 +37,26 @@ def generate_dat_file():
     for entry in entries:
         entry = entry["responses"]
 
+        surname_index = 0
+        for i, answer in enumerate(entry):
+            if answer["questionId"] == SURNAME_ID:
+                surname_index = i
+                break
+
         surname = "".join(
-            [
-                s.capitalize()
-                for s in entry.pop(1)["answer"]
-                .strip()
-                .replace("'", "")
-                .replace('"', "")
-                .split()
-            ]
+            s.strip().capitalize()
+            for s in entry.pop(surname_index)["answer"].strip().split()
         )
 
+        name_index = 0
+        for i, answer in enumerate(entry):
+            if answer["questionId"] == NAME_ID:
+                name_index = i
+                break
+
         name = surname + "".join(
-            [
-                n.capitalize()
-                for n in entry.pop(0)["answer"]
-                .strip()
-                .replace("'", "")
-                .replace('"', "")
-                .split()
-            ]
+            s.strip().capitalize()
+            for s in entry.pop(name_index)["answer"].strip().split()
         )
 
         names.append(name)
