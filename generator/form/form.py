@@ -1,6 +1,8 @@
 import json
 import requests
 
+from thefuzz import fuzz
+
 from generator.utils.days import Days
 from generator.utils.slots import Slots
 
@@ -122,6 +124,19 @@ def generate_dat_file():
     with open("turni_obbligatori.txt", "r") as f:
         must_do_something = [line.strip() for line in f.readlines()]
 
+    for i, name in enumerate(must_do_something):
+        if name not in names:
+            max_ratio = 0
+            max_name = ""
+            for other in names:
+                current_ratio = fuzz.ratio(name, other)
+                if current_ratio > max_ratio:
+                    max_ratio = current_ratio
+                    max_name = other
+
+            print(f"Animatore {name} cambiato in {max_name}")
+            must_do_something[i] = max_name
+
     with open("turni.mod", "r") as f:
         model = f.read()
 
@@ -135,10 +150,9 @@ def generate_dat_file():
         ],
     }
 
+    INDEX = 0 if len(must_do_something) == 0 else 1
     while "{{}}" in model:
-        model = model.replace(
-            "{{}}", FORMAT_MODEL[len(must_do_something)].pop(0), count=1
-        )
+        model = model.replace("{{}}", FORMAT_MODEL[INDEX].pop(0), count=1)
 
     with open("turni.mod", "w") as f:
         f.write(model)
