@@ -1,8 +1,9 @@
-# Cache di python
-__pycache__/
+# Spell checker
+.vscode/
 
-# Python virtual environment
+# Python
 venv/
+__pycache__/
 
 # PDF settimane
 settimane/
