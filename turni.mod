@@ -7,6 +7,8 @@ set FasceOrarie;
 set Giorni;
 # Insieme degli animatori che hanno risposto al form
 set Animatori;
+{{}}
+{{}}
 # Disponibilità di ogni animatore nei vari giorni e nelle varie fasce orarie
 param Disponibilita {Giorni, Animatori, FasceOrarie} binary;
 # Necessità di ogni animatore nei vari giorni e nelle varie fasce orarie
@@ -39,6 +41,8 @@ var MinimoNumeroTurni integer;
 var NumeriTurniNecessita {Animatori} integer >= 0;
 
 # VINCOLI
+{{}}
+{{}}
 # Presenza di <AnimatoriPre> animatori al pre
 subject to NumeroAnimatoriPre {g in Giorni}:
     sum {a in Animatori} Assegnamento[g,a,'01_Pre'] = AnimatoriPre;

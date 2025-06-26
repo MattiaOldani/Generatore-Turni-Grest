@@ -119,6 +119,30 @@ def generate_dat_file():
         must_turns[name] = [must_pre, must_mensa, must_post]
         need_names[name] = must_flag
 
+    with open("turni_obbligatori.txt", "r") as f:
+        must_do_something = [line.strip() for line in f.readlines()]
+
+    with open("turni.mod", "r") as f:
+        model = f.read()
+
+    FORMAT_MODEL = {
+        0: ["", "", "", ""],
+        1: [
+            "# Insieme degli animatori che devono fare per forza un turno",
+            "set AnimatoriConTurnoObbligatorio;",
+            "# Alcuni animatori devono fare per forza un turno",
+            "subject to LevaObbligatoria {a in AnimatoriConTurnoObbligatorio}:\n\tsum {g in Giorni, fo in FasceOrarie} Assegnamento[g,a,fo] >= 1;",
+        ],
+    }
+
+    while "{{}}" in model:
+        model = model.replace(
+            "{{}}", FORMAT_MODEL[len(must_do_something)].pop(0), count=1
+        )
+
+    with open("turni.mod", "w") as f:
+        f.write(model)
+
     with open("data.dat", "w") as f:
         slots = [f"0{s.value + 1}_{s.name}" for s in Slots]
         f.write(f"set FasceOrarie := {' '.join(slots)};\n\n")
@@ -127,6 +151,11 @@ def generate_dat_file():
         f.write(f"set Giorni := {' '.join(days)};\n\n")
 
         f.write(f"set Animatori := {' '.join(names)};\n\n")
+
+        if len(must_do_something) > 0:
+            f.write(
+                f"set AnimatoriConTurnoObbligatorio := {' '.join(must_do_something)};\n\n"
+            )
 
         f.write(f"param Disponibilita: {' '.join(slots)} :=\n")
 
