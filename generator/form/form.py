@@ -31,6 +31,10 @@ def generate_dat_file():
     SURNAME_ID = "bekXD1"
     NAME_ID = "7KDOe0"
 
+    ANIMATORS_PRE = [0, 0, 0, 0, 0]
+    ANIMATORS_POST = [0, 0, 0, 0, 0]
+    ANIMATORS_LUNCH = [0, 0, 0, 0, 0]
+
     turns = dict()
     must_turns = dict()
     names = list()
@@ -85,14 +89,17 @@ def generate_dat_file():
                     must_flag = 1
                     for answer in answers:
                         must_pre[PRE_POST_INDEX.index(answer)] = 1
+                        ANIMATORS_PRE[PRE_POST_INDEX.index(answer)] += 1
                 case "Bp1qgR":
                     must_flag = 1
                     for answer in answers:
                         must_mensa[LUNCH_INDEX.index(answer)] = 1
+                        ANIMATORS_LUNCH[LUNCH_INDEX.index(answer)] += 1
                 case "kGAXpo":
                     must_flag = 1
                     for answer in answers:
                         must_post[PRE_POST_INDEX.index(answer)] = 1
+                        ANIMATORS_POST[PRE_POST_INDEX.index(answer)] += 1
                 case "rOEjxN":
                     for answer in answers:
                         pre[PRE_POST_INDEX.index(answer)] = 1
@@ -136,6 +143,11 @@ def generate_dat_file():
 
             print(f"Animatore {name} cambiato in {max_name}")
             must_do_something[i] = max_name
+
+    for i in range(5):
+        ANIMATORS_PRE[i] = max(ANIMATORS_PRE[i], environment["ANIMATORS_PRE"])
+        ANIMATORS_POST[i] = max(ANIMATORS_POST[i], environment["ANIMATORS_POST"])
+        ANIMATORS_LUNCH[i] = max(ANIMATORS_LUNCH[i], environment["ANIMATORS_LUNCH"])
 
     with open("turni.mod", "r") as f:
         model = f.read()
@@ -203,14 +215,32 @@ def generate_dat_file():
             f.write(f"{name} {need_names[name]}\n")
         f.write(";\n\n")
 
-        ANIMATORS_PRE = environment["ANIMATORS_PRE"]
-        f.write(f"param AnimatoriPre := {ANIMATORS_PRE};\n\n")
+        f.write("param AnimatoriPre :=\n")
 
-        ANIMATORS_POST = environment["ANIMATORS_POST"]
-        f.write(f"param AnimatoriPost := {ANIMATORS_POST};\n\n")
+        result = str()
+        for i, day in enumerate(Days):
+            result += f"{days[day.value]} {ANIMATORS_PRE[i]}\n"
+            if day.value == 4:
+                result = result.strip() + ";\n\n"
+        f.write(result)
 
-        ANIMATORS_LUNCH = environment["ANIMATORS_LUNCH"]
-        f.write(f"param AnimatoriMensa := {ANIMATORS_LUNCH};\n\n")
+        f.write("param AnimatoriPost :=\n")
+
+        result = str()
+        for i, day in enumerate(Days):
+            result += f"{days[day.value]} {ANIMATORS_POST[i]}\n"
+            if day.value == 4:
+                result = result.strip() + ";\n\n"
+        f.write(result)
+
+        f.write("param AnimatoriMensa :=\n")
+
+        result = str()
+        for i, day in enumerate(Days):
+            result += f"{days[day.value]} {ANIMATORS_LUNCH[i]}\n"
+            if day.value == 4:
+                result = result.strip() + ";\n\n"
+        f.write(result)
 
         ANIMATORS_SHARE_LUNCH = environment["ANIMATORS_SHARE_LUNCH"]
         f.write(f"param AnimatoriPranzoCondiviso := {ANIMATORS_SHARE_LUNCH};\n\n")

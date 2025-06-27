@@ -16,11 +16,11 @@ param Necessita {Giorni, Animatori, FasceOrarie} binary;
 # Se gli animatori hanno necessità di qualche turno
 param HannoNecessita {Animatori} binary;
 # Numero di animatori richiesti per il pre
-param AnimatoriPre;
+param AnimatoriPre {Giorni};
 # Numero di animatori richiesti per il post
-param AnimatoriPost;
+param AnimatoriPost {Giorni};
 # Numero di animatori richiesti per la mensa
-param AnimatoriMensa;
+param AnimatoriMensa {Giorni};
 # Numero di animatori richiesti al pranzo condiviso
 param AnimatoriPranzoCondiviso;
 # Massimo numero di ripetizioni dello stesso turno
@@ -45,13 +45,13 @@ var NumeriTurniNecessita {Animatori} integer >= 0;
 {{}}
 # Presenza di <AnimatoriPre> animatori al pre
 subject to NumeroAnimatoriPre {g in Giorni}:
-    sum {a in Animatori} Assegnamento[g,a,'01_Pre'] = AnimatoriPre;
+    sum {a in Animatori} Assegnamento[g,a,'01_Pre'] = AnimatoriPre[g];
 # Presenza di <AnimatoriPost> animatori al post
 subject to NumeroAnimatoriPost {g in Giorni}:
-    sum {a in Animatori} Assegnamento[g,a,'03_Post'] = AnimatoriPost;
+    sum {a in Animatori} Assegnamento[g,a,'03_Post'] = AnimatoriPost[g];
 # Presenza di <AnimatoriMensa> animatori alla mensa
 subject to NumeroAnimatoriMensa {g in Giorni : g <> '04_Giovedi'}:
-    sum {a in Animatori} Assegnamento[g,a,'02_Mensa'] = AnimatoriMensa;
+    sum {a in Animatori} Assegnamento[g,a,'02_Mensa'] = AnimatoriMensa[g];
 # Presenza di <AnimatoriPranzoCondiviso> animatori al pranzo condiviso
 subject to NumeroAnimatoriPranzoCondiviso:
 	sum {a in Animatori} Assegnamento['04_Giovedi',a,'02_Mensa'] = AnimatoriPranzoCondiviso;
