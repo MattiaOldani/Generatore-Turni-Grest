@@ -1,15 +1,21 @@
 import os
 import subprocess
 
-from generator.form.form import generate_dat_file
+from generator.form.form import FormManager
 from generator.telegram.telegram import send_pdf, send_turns
 from generator.template.template import generate_template
 
 
 def main():
-    ban_names = generate_dat_file()
+    form_manager = FormManager()
+    form_manager.generate_dat_file()
 
-    print(f"Animatori che non sanno leggere quello che scrivo: {ban_names}")
+    ban_names = form_manager.ban_names
+
+    if len(ban_names) == 0:
+        print("Gli animatori sono stati bravi e sanno leggere quello che scrivo")
+    else:
+        print(f"Animatori che non sanno leggere quello che scrivo: {ban_names}")
 
     turns = generate_template()
 
