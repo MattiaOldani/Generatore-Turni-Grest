@@ -3,7 +3,7 @@ import subprocess
 
 from generator.form.form import FormManager
 from generator.telegram.telegram import send_pdf, send_turns
-from generator.template.template import generate_template
+from generator.template.template import TemplateGenerator
 
 
 def main():
@@ -17,7 +17,8 @@ def main():
     else:
         print(f"Animatori che non sanno leggere quello che scrivo: {ban_names}")
 
-    turns = generate_template()
+    template_generator = TemplateGenerator()
+    turns = template_generator.generate_template()
 
     PDF_FILENAME = "turni.pdf"
     TYP_FILENAME = [f for f in os.listdir() if f.endswith("typ")][0]
