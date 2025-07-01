@@ -1,7 +1,7 @@
 #set align(center + horizon)
 #set page(flipped: true)
 
-#let colortheme = maroon
+#let colortheme = fuchsia
 
 #let frame(stroke) = (
   (x, y) => (
@@ -43,4 +43,3 @@
   inset: 10pt,
   align: horizon,
   [], [*Lunedì*], [*Martedì*], [*Mercoledì*], [*Giovedì*], [*Venerdì*],
-)
