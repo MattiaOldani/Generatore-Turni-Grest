@@ -43,6 +43,9 @@ var NumeriTurniNecessita {Animatori} integer >= 0;
 # VINCOLI
 {{}}
 {{}}
+# Se ho necessità devo essere messo in quel turno
+subject to SoddisfareLeNecessita {g in Giorni, a in Animatori, fo in FasceOrarie : Necessita[g,a,fo] = 1}:
+    Assegnamento[g,a,fo] = Necessita[g,a,fo];
 # Presenza di <AnimatoriPre> animatori al pre
 subject to NumeroAnimatoriPre {g in Giorni}:
     sum {a in Animatori} Assegnamento[g,a,'01_Pre'] = AnimatoriPre[g];
@@ -74,9 +77,6 @@ subject to DefinizioneNumeroTurniNecessita {a in Animatori}:
 # Non diamo turni a chi ha delle necessità
 subject to PerdonoDivino:
     sum {a in Animatori} NumeriTurniNecessita[a] = 0;
-# Se ho necessità devo essere messo in quel turno
-subject to SoddisfareLeNecessita {g in Giorni, a in Animatori, fo in FasceOrarie : Necessita[g,a,fo] = 1}:
-    Assegnamento[g,a,fo] = Necessita[g,a,fo];
 # Faccio turno solo se sono disponibile
 subject to Candidatura {g in Giorni, a in Animatori, fo in FasceOrarie}:
     Assegnamento[g,a,fo] <= Disponibilita[g,a,fo] + Necessita[g,a,fo];
