@@ -64,7 +64,10 @@ class FormManager:
             while "  " in surname:
                 surname = surname.replace("  ", " ")
 
-            surname = "".join(s.strip().capitalize() for s in surname.split())
+            surname = "".join(
+                s.strip().replace("(", "").replace(")", "").capitalize()
+                for s in surname.split()
+            )
 
             name_index = 0
             for i, answer in enumerate(entry):
@@ -76,7 +79,10 @@ class FormManager:
             while "  " in name:
                 name = name.replace("  ", " ")
 
-            name = surname + "".join(s.strip().capitalize() for s in name.split())
+            name = surname + "".join(
+                s.strip().replace("(", "").replace(")", "").capitalize()
+                for s in name.split()
+            )
 
             names.append(name)
 
