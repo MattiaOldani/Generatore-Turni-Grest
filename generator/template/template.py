@@ -36,7 +36,7 @@ class TemplateGenerator:
 
         with open("template.typ", "a") as f:
             for slot in Slots:
-                f.write(f"\t[_{slot.name}_], ")
+                f.write(f"\t[*{slot.name}*], ")
                 for day in Days:
                     animators = turns.get_animators(slot, day)
                     names = ", ".join([a[1] for a in animators])
