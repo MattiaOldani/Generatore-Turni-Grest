@@ -18,7 +18,9 @@ def main():
         print(f"Animatori che non sanno leggere quello che scrivo: {ban_names}")
 
     template_generator = TemplateGenerator()
-    turns = template_generator.generate_template()
+    template_generator.generate_template()
+
+    turns = template_generator.turns
 
     PDF_FILENAME = "turni.pdf"
     TYP_FILENAME = [f for f in os.listdir() if f.endswith("typ")][0]
