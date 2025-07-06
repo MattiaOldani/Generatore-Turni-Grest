@@ -10,13 +10,6 @@ def main():
     form_manager = FormManager()
     form_manager.generate_dat_file()
 
-    ban_names = form_manager.ban_names
-
-    if len(ban_names) == 0:
-        print("Gli animatori sono stati bravi e sanno leggere quello che scrivo")
-    else:
-        print(f"Animatori che non sanno leggere quello che scrivo: {ban_names}")
-
     template_generator = TemplateGenerator()
     template_generator.generate_template()
 

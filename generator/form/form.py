@@ -8,18 +8,15 @@ from generator.utils.slots import Slots
 
 
 class FormManager:
-    PRE_POST_INDEX = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì"]
+    DAYS_INDEX = ["Lunedi", "Martedi", "Mercoledi", "Giovedi", "Venerdi"]
 
-    LUNCH_INDEX = [
-        "Lunedì",
-        "Martedì",
-        "Mercoledì",
-        "Giovedì [pranzo condiviso]",
-        "Venerdì",
-    ]
+    SURNAME_ID = "WRpKWk"
+    NAME_ID = "erx0Jl"
 
-    SURNAME_ID = "bekXD1"
-    NAME_ID = "7KDOe0"
+    # Indici che non servono, ma che mi salvo per sicurezza
+    # ARCO_ETA = "xDNloy"
+    # PISCINA = "xDNLgo"
+    # GITA = "P9BWLd"
 
     def __init__(self):
         with open("environment.json", "r") as f:
@@ -48,7 +45,6 @@ class FormManager:
         turns = dict()
         must_turns = dict()
         names = list()
-        ban_names = set()
         need_names = dict()
 
         for entry in entries:
@@ -102,46 +98,30 @@ class FormManager:
                     continue
 
                 match other["questionId"]:
-                    case "ApJN0e":
+                    case "bevODZ":
                         must_flag = 1
                         for answer in answers:
-                            must_pre[FormManager.PRE_POST_INDEX.index(answer)] = 1
-                            animators_pre[FormManager.PRE_POST_INDEX.index(answer)] += 1
-                    case "Bp1qgR":
+                            must_pre[FormManager.DAYS_INDEX.index(answer)] = 1
+                            animators_pre[FormManager.DAYS_INDEX.index(answer)] += 1
+                    case "Apy80z":
                         must_flag = 1
                         for answer in answers:
-                            must_mensa[FormManager.LUNCH_INDEX.index(answer)] = 1
-                            animators_lunch[FormManager.LUNCH_INDEX.index(answer)] += 1
-                    case "kGAXpo":
+                            must_mensa[FormManager.DAYS_INDEX.index(answer)] = 1
+                            animators_lunch[FormManager.DAYS_INDEX.index(answer)] += 1
+                    case "Bp0BgK":
                         must_flag = 1
                         for answer in answers:
-                            must_post[FormManager.PRE_POST_INDEX.index(answer)] = 1
-                            animators_post[
-                                FormManager.PRE_POST_INDEX.index(answer)
-                            ] += 1
-                    case "rOEjxN":
+                            must_post[FormManager.DAYS_INDEX.index(answer)] = 1
+                            animators_post[FormManager.DAYS_INDEX.index(answer)] += 1
+                    case "kGvZpe":
                         for answer in answers:
-                            pre[FormManager.PRE_POST_INDEX.index(answer)] = 1
-                    case "47j4WX":
+                            pre[FormManager.DAYS_INDEX.index(answer)] = 1
+                    case "vDK2pD":
                         for answer in answers:
-                            mensa[FormManager.LUNCH_INDEX.index(answer)] = 1
-                    case "joxada":
+                            mensa[FormManager.DAYS_INDEX.index(answer)] = 1
+                    case "Kxk0gV":
                         for answer in answers:
-                            post[FormManager.PRE_POST_INDEX.index(answer)] = 1
-
-            for i in range(len(pre)):
-                if must_pre[i] == 1:
-                    if pre[i] == 1:
-                        ban_names.add(name)
-                    pre[i] = 0
-                if must_mensa[i] == 1:
-                    if mensa[i] == 1:
-                        ban_names.add(name)
-                    mensa[i] = 0
-                if must_post[i] == 1:
-                    if post[i] == 1:
-                        ban_names.add(name)
-                    post[i] = 0
+                            post[FormManager.DAYS_INDEX.index(answer)] = 1
 
             turns[name] = [pre, mensa, post]
             must_turns[name] = [must_pre, must_mensa, must_post]
@@ -270,5 +250,3 @@ class FormManager:
             f.write(
                 f"param MassimoNumeroTurniGiornalieri := {self.max_number_daily_slots};\n"
             )
-
-        self.ban_names = ban_names
