@@ -21,8 +21,6 @@ param AnimatoriPre {Giorni};
 param AnimatoriPost {Giorni};
 # Numero di animatori richiesti per la mensa
 param AnimatoriMensa {Giorni};
-# Numero di animatori richiesti al pranzo condiviso
-param AnimatoriPranzoCondiviso;
 # Massimo numero di ripetizioni dello stesso turno
 param MassimaRipetizioneStessoTurno;
 # Numero di turni che ogni animatore fa al massimo in un giorno
@@ -53,11 +51,8 @@ subject to NumeroAnimatoriPre {g in Giorni}:
 subject to NumeroAnimatoriPost {g in Giorni}:
     sum {a in Animatori} Assegnamento[g,a,'03_Post'] = AnimatoriPost[g];
 # Presenza di <AnimatoriMensa> animatori alla mensa
-subject to NumeroAnimatoriMensa {g in Giorni : g <> '04_Giovedi'}:
+subject to NumeroAnimatoriMensa {g in Giorni}:
     sum {a in Animatori} Assegnamento[g,a,'02_Mensa'] = AnimatoriMensa[g];
-# Presenza di <AnimatoriPranzoCondiviso> animatori al pranzo condiviso
-subject to NumeroAnimatoriPranzoCondiviso:
-	sum {a in Animatori} Assegnamento['04_Giovedi',a,'02_Mensa'] = AnimatoriPranzoCondiviso;
 # Definizione del numero di turni
 subject to DefinizioneNumeroTurni {a in Animatori}:
     NumeroTurni[a] = sum {g in Giorni, fo in FasceOrarie} Assegnamento[g,a,fo];

@@ -166,7 +166,10 @@ class FormManager:
             if lunch_counter[i] == 0:
                 animators_lunch[i] = 0
             else:
-                animators_lunch[i] = max(animators_lunch[i], self.lunch)
+                if i == 3:
+                    animators_lunch[i] = max(animators_lunch[i], self.share_lunch)
+                else:
+                    animators_lunch[i] = max(animators_lunch[i], self.lunch)
 
             if post_counter[i] == 0:
                 animators_post[i] = 0
@@ -265,8 +268,6 @@ class FormManager:
                 if day.value == 4:
                     result = result.strip() + ";\n\n"
             f.write(result)
-
-            f.write(f"param AnimatoriPranzoCondiviso := {self.share_lunch};\n\n")
 
             f.write(
                 f"param MassimaRipetizioneStessoTurno := {self.max_repetition_same_slot};\n\n"
