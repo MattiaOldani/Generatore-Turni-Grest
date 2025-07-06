@@ -43,6 +43,10 @@ class FormManager:
         animators_post = [0, 0, 0, 0, 0]
         animators_lunch = [0, 0, 0, 0, 0]
 
+        pre_counter = [0, 0, 0, 0, 0]
+        lunch_counter = [0, 0, 0, 0, 0]
+        post_counter = [0, 0, 0, 0, 0]
+
         turns = dict()
         must_turns = dict()
         names = list()
@@ -104,25 +108,31 @@ class FormManager:
                         for answer in answers:
                             must_pre[FormManager.DAYS_INDEX.index(answer)] = 1
                             animators_pre[FormManager.DAYS_INDEX.index(answer)] += 1
+                            pre_counter[FormManager.DAYS_INDEX.index(answer)] += 1
                     case "Apy80z":
                         must_flag = 1
                         for answer in answers:
                             must_mensa[FormManager.DAYS_INDEX.index(answer)] = 1
                             animators_lunch[FormManager.DAYS_INDEX.index(answer)] += 1
+                            lunch_counter[FormManager.DAYS_INDEX.index(answer)] += 1
                     case "Bp0BgK":
                         must_flag = 1
                         for answer in answers:
                             must_post[FormManager.DAYS_INDEX.index(answer)] = 1
                             animators_post[FormManager.DAYS_INDEX.index(answer)] += 1
+                            post_counter[FormManager.DAYS_INDEX.index(answer)] += 1
                     case "kGvZpe":
                         for answer in answers:
                             pre[FormManager.DAYS_INDEX.index(answer)] = 1
+                            pre_counter[FormManager.DAYS_INDEX.index(answer)] += 1
                     case "vDK2pD":
                         for answer in answers:
                             mensa[FormManager.DAYS_INDEX.index(answer)] = 1
+                            lunch_counter[FormManager.DAYS_INDEX.index(answer)] += 1
                     case "Kxk0gV":
                         for answer in answers:
                             post[FormManager.DAYS_INDEX.index(answer)] = 1
+                            post_counter[FormManager.DAYS_INDEX.index(answer)] += 1
 
             turns[name] = [pre, mensa, post]
             must_turns[name] = [must_pre, must_mensa, must_post]
@@ -148,9 +158,20 @@ class FormManager:
                 must_do_something[i] = max_name
 
         for i in range(5):
-            animators_pre[i] = max(animators_pre[i], self.pre)
-            animators_post[i] = max(animators_post[i], self.post)
-            animators_lunch[i] = max(animators_lunch[i], self.lunch)
+            if pre_counter[i] == 0:
+                animators_pre[i] = 0
+            else:
+                animators_pre[i] = max(animators_pre[i], self.pre)
+
+            if lunch_counter[i] == 0:
+                animators_lunch[i] = 0
+            else:
+                animators_lunch[i] = max(animators_lunch[i], self.lunch)
+
+            if post_counter[i] == 0:
+                animators_post[i] = 0
+            else:
+                animators_post[i] = max(animators_post[i], self.post)
 
         with open("turni.mod", "r") as f:
             model = f.read()
