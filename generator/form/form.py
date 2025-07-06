@@ -1,4 +1,5 @@
 import json
+import os
 import requests
 
 from thefuzz import fuzz
@@ -129,6 +130,9 @@ class FormManager:
 
         with open("turni_obbligatori.txt", "r") as f:
             must_do_something = [line.strip() for line in f.readlines()]
+
+        if len(must_do_something) > 0:
+            os.rename("turni_obbligatori.txt", "vecchi_turni_obbligatori.txt")
 
         for i, name in enumerate(must_do_something):
             if name not in names:

@@ -1,5 +1,4 @@
 import json
-import os
 import telebot
 
 
@@ -27,8 +26,8 @@ class TelegramChannel:
         )
         self.bot.send_message(self.channel_ID, message, parse_mode="markdown")
 
-        os.rename("turni_obbligatori.txt", "vecchi_turni_obbligatori.txt")
-
         no_turns = [name for name, _ in filter(lambda x: x[1] == 0, counts)]
+
         with open("turni_obbligatori.txt", "w") as f:
-            f.write("\n".join(["".join(name.split()) for name in no_turns]) + "\n")
+            if len(no_turns) > 0:
+                f.write("\n".join(["".join(name.split()) for name in no_turns]) + "\n")
