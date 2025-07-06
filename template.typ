@@ -40,7 +40,7 @@
   }
 )
 
-#show table.cell.where(y: 0): set text(weight: "bold")
+#show table.cell.where(x: 0).or(table.cell.where(y: 0)): set text(weight: "bold")
 
 #set table(inset: 10pt, align: horizon, stroke: frame(colortheme), fill: shading(colortheme))
 
@@ -51,4 +51,4 @@
   columns: (15%, 17.5%, 17.5%, 17.5%, 17.5%, 17.5%),
   inset: 10pt,
   align: horizon,
-  [], [*Lunedì*], [*Martedì*], [*Mercoledì*], [*Giovedì*], [*Venerdì*],
+  [], [Lunedì], [Martedì], [Mercoledì], [Giovedì], [Venerdì],
