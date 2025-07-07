@@ -1,27 +1,29 @@
-import json
 import os
 import requests
 
 from ortools.sat.python import cp_model
 from thefuzz import fuzz
 
+from generator.environment import (
+    FORM_API_KEY,
+    FORM_ENDPOINT,
+    PRE_ANIMATORS,
+    POST_ANIMATORS,
+    LUNCH_ANIMATORS,
+    SHARE_LUNCH_ANIMATORS,
+    MAX_REPETITION_SAME_SLOT,
+    MAX_NUMBER_DAILY_SLOTS,
+)
 from generator.indexes.days import Days
 from generator.indexes.slots import Slots
 
 
 class Solver:
     def __init__(self):
-        with open("environment.json", "r") as f:
-            environment = json.load(f)
-
-        self.environment = environment
         self.model = cp_model.CpModel()
         self.solver = cp_model.CpSolver()
 
     def populate_model(self):
-        FORM_API_KEY = self.environment["FORM_API_KEY"]
-        FORM_ENDPOINT = self.environment["FORM_ENDPOINT"]
-
         NAME_ID = "erx0Jl"
         SURNAME_ID = "WRpKWk"
 
@@ -168,32 +170,26 @@ class Solver:
         lunch_animators = {}
         post_animators = {}
 
-        PRE = self.environment["PRE_ANIMATORS"]
-        POST = self.environment["POST_ANIMATORS"]
-        LUNCH = self.environment["LUNCH_ANIMATORS"]
-        SHARE_LUNCH = self.environment["SHARE_LUNCH_ANIMATORS"]
-
         for i, day in enumerate(days):
             if pre_counter[i] == 0:
                 pre_animators[day] = 0
             else:
-                pre_animators[day] = max(must_pre_counter[i], PRE)
+                pre_animators[day] = max(must_pre_counter[i], PRE_ANIMATORS)
 
             if lunch_counter[i] == 0:
                 lunch_animators[day] = 0
             else:
                 if i == 3:
-                    lunch_animators[day] = max(must_lunch_counter[i], SHARE_LUNCH)
+                    lunch_animators[day] = max(
+                        must_lunch_counter[i], SHARE_LUNCH_ANIMATORS
+                    )
                 else:
-                    lunch_animators[day] = max(must_lunch_counter[i], LUNCH)
+                    lunch_animators[day] = max(must_lunch_counter[i], LUNCH_ANIMATORS)
 
             if post_counter[i] == 0:
                 post_animators[day] = 0
             else:
-                post_animators[day] = max(must_post_counter[i], POST)
-
-        max_repetition_same_slot = self.environment["MAX_REPETITION_SAME_SLOT"]
-        max_number_daily_slots = self.environment["MAX_NUMBER_DAILY_SLOTS"]
+                post_animators[day] = max(must_post_counter[i], POST_ANIMATORS)
 
         turns_number = {
             a: self.model.NewIntVar(0, 15, f"turns_number_{a}") for a in animators
@@ -278,7 +274,7 @@ class Solver:
 
             for s in slots:
                 self.model.Add(
-                    sum(assignment[d, a, s] for d in days) <= max_repetition_same_slot
+                    sum(assignment[d, a, s] for d in days) <= MAX_REPETITION_SAME_SLOT
                 )
 
         # vincolo più turni stesso giorno
@@ -288,7 +284,7 @@ class Solver:
 
             for d in days:
                 self.model.Add(
-                    sum(assignment[d, a, s] for s in slots) <= max_number_daily_slots
+                    sum(assignment[d, a, s] for s in slots) <= MAX_NUMBER_DAILY_SLOTS
                 )
 
         # funzione obiettivo
