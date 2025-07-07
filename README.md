@@ -8,10 +8,10 @@ Sto scherzando, ho fatto questo perché sono tremendamente pigro.
 
 ### Fase preliminare
 
-La fase preliminare di tutto il workflow è il __setup dell'environment__, che viene effettuato modificando il file __`environment.json`__.
+La fase preliminare di tutto il workflow è il __setup dell'environment__, che viene effettuato modificando il file __`environment.py`__ nella root del package __generator__.
 
 Devono essere inserite le seguenti variabili d'ambiente:
-- per quanto riguarda il package `form`:
+- per quanto riguarda il package `solver`:
   - `FORM_API_KEY`: token fornito da Tally per accedere alle API;
   - `FORM_ENDPOINT`: link al quale trovare le risposte del form;
   - `PRE_ANIMATORS`: numero di animatori al pre;
@@ -42,7 +42,7 @@ Ogni animatore compila un [form Tally](https://tally.so) tra venerdì mattina e 
 
 #### Popolamento del modello
 
-Domenica sera vengono effettuate delle richieste HTTP alle API fornite da Tally per scaricare le risposte date dagli animatori e popolare il modello di PLI, usando anche i dati inseriti nel file `environment.json`.
+Domenica sera vengono effettuate delle richieste HTTP alle API fornite da Tally per scaricare le risposte date dagli animatori e popolare il modello di PLI, usando anche i dati inseriti nel file `environment.py`.
 
 ### Seconda fase
 
