@@ -1,19 +1,19 @@
 import os
 import subprocess
 
-from generator.form.form import FormManager
+from generator.solver.solver import Solver
 from generator.telegram.telegram import TelegramChannel
 from generator.template.template import TemplateGenerator
 
 
 def main():
-    form_manager = FormManager()
-    form_manager.generate_dat_file()
+    solver = Solver()
+    solver.populate_model()
+    solver.solve()
 
-    template_generator = TemplateGenerator()
+    template_generator = TemplateGenerator(solver)
     template_generator.generate_template()
-
-    turns = template_generator.turns
+    turns = solver.get_turns_number()
 
     PDF_FILENAME = "turni.pdf"
     TYP_FILENAME = [f for f in os.listdir() if f.endswith("typ")][0]
