@@ -2,8 +2,8 @@ import json
 import os
 import requests
 
-from thefuzz import fuzz
 from ortools.sat.python import cp_model
+from thefuzz import fuzz
 
 from generator.indexes.days import Days
 from generator.indexes.slots import Slots
@@ -294,16 +294,18 @@ class Solver:
         # funzione obiettivo
         self.model.Minimize(max_turns_number - min_turns_number)
 
-        self.animators = animators
+        self.animators = sorted(animators)
         self.turns_number = turns_number
         self.assignment = assignment
 
     def solve(self):
         status = self.solver.Solve(self.model)
 
-        self.turns_number = [
-            (a, self.solver.Value(self.turns_number[a])) for a in self.animators
-        ]
+        self.turns_number = sorted(
+            [(a, self.solver.Value(self.turns_number[a])) for a in self.animators],
+            key=lambda x: x[1],
+            reverse=True,
+        )
 
         if status == cp_model.OPTIMAL:
             return 0
@@ -319,4 +321,4 @@ class Solver:
         return animators
 
     def get_turns_number(self):
-        return sorted(self.turns_number, key=lambda x: x[1], reverse=True)
+        return self.turns_number
