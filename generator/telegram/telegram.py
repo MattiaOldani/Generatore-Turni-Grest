@@ -19,13 +19,21 @@ class TelegramChannel:
             )
 
     def send_turns(self, turns):
+        yes_turns = list(filter(lambda x: x[1] > 0, turns))
+
         message = "\n".join(
             ["*Numero di turni per animatore*"]
-            + list(map(lambda x: f"{x[0]}: {x[1]}", turns))
+            + list(map(lambda x: f"• {x[0]}: {x[1]}", yes_turns))
         )
         self.bot.send_message(self.channel_ID, message, parse_mode="markdown")
 
         no_turns = [name for name, _ in filter(lambda x: x[1] == 0, turns)]
+
+        message = "\n".join(
+            ["*Animatori con turno obbligatorio settimana prossima*"]
+            + list(map(lambda x: f"• {x}", no_turns))
+        )
+        self.bot.send_message(self.channel_ID, message, parse_mode="markdown")
 
         with open("turni_obbligatori.txt", "w") as f:
             if len(no_turns) > 0:
