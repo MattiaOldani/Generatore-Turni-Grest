@@ -309,10 +309,19 @@ class Solver:
             return 1
 
     def get_slot_assignment(self, slot, day):
+        def split_name(name: str):
+            result = name[0]
+            for char in name[1:]:
+                if char.capitalize() == char:
+                    result += " "
+                result += char
+
+            return result
+
         animators = []
         for a in self.animators:
             if self.solver.Value(self.assignment[day, a, slot]):
-                animators += [a]
+                animators += [split_name(a)]
 
         return animators
 
