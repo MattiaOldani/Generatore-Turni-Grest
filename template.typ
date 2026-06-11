@@ -50,5 +50,4 @@
 #table(
   columns: (15%, 17.5%, 17.5%, 17.5%, 17.5%, 17.5%),
   inset: 10pt,
-  align: horizon,
   [], [Lunedì], [Martedì], [Mercoledì], [Giovedì], [Venerdì],

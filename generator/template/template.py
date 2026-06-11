@@ -16,7 +16,7 @@ class TemplateGenerator:
 
                 for day in days:
                     animators = self.solver.get_slot_assignment(slot, day)
-                    names = ", ".join(animators)
+                    names = " \\ ".join(animators)
                     if names == "":
                         names = "-"
                     f.write(f"[{names}], ")
